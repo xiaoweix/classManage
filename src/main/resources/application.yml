@@ -1,0 +1,22 @@
+server:
+  port: 8087
+
+spring:
+  datasource:
+    username: root
+    password: xxw+2019
+    url: jdbc:mysql://39.105.45.77:3306/uni_course_room_manage?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
+    driver-class-name: com.mysql.jdbc.Driver
+
+mybatis:
+  #  configLocation: classpath:mybatis/mybatis-config.xml
+  mapperLocations: classpath:mybatis/mapper/*Mapper.xml
+  typeAliasesPackage: com.tusdao.**.model
+  checkConfigLocation: true
+
+#showSql
+logging:
+  level:
+    com:
+      example:
+        mapper : debug
