@@ -1,5 +1,6 @@
 package com.classManage.tusdt.dao;
 
+import com.classManage.tusdt.model.BO.UserListBO;
 import com.classManage.tusdt.model.User;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
@@ -17,4 +18,8 @@ public interface UserMapper {
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
+
+    List<UserListBO> selectUserByName(@Param("userName") String userName);
+
+
 }

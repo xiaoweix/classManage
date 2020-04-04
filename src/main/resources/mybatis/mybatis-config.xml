@@ -6,7 +6,7 @@
     <!-- 配置全局属性 -->
     <settings>
         <!-- 打印查询语句 -->
-        <!--<setting name="logImpl" value="STDOUT_LOGGING" />-->
+        <setting name="logImpl" value="STDOUT_LOGGING" />
 
         <!-- 使用jdbc的getGeneratedKeys获取数据库自增主键值 -->
         <setting name="useGeneratedKeys" value="true"/>
@@ -33,10 +33,6 @@
         <typeAlias alias="ArrayList" type="java.util.ArrayList"/>
         <typeAlias alias="LinkedList" type="java.util.LinkedList"/>
 
-        <!--此处覆盖其他包中的Role-->
-        <package name="com.tusdao.base.model"/>
-        <package name="com.tusdao.baasDeployManager.model"/>
-        <package name="com.tusdao.baasKettleManager.vo"/>
     </typeAliases>
 
     <plugins>
