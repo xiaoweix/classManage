@@ -103,4 +103,15 @@
       is_delete = #{isDelete,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="getBuildingInfoList" resultType="com.classManage.tusdt.model.BO.BuildingBaseInfoBO">
+    select id, building_name buildingName, address, building_layer buildingLayer, school_id schoolId from building_info where is_delete = 0
+  </select>
+  <select id="checkBuildingName" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from building_info
+    where is_delete = 0
+    and school_id = #{schoolId,jdbcType=INTEGER}
+    and building_name = #{buildingName,jdbcType=VARCHAR}
+  </select>
 </mapper>

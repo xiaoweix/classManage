@@ -1,5 +1,6 @@
 package com.classManage.tusdt.dao;
 
+import com.classManage.tusdt.model.BO.BuildingBaseInfoBO;
 import com.classManage.tusdt.model.BuildingInfo;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
@@ -17,4 +18,8 @@ public interface BuildingInfoMapper {
     int updateByPrimaryKeySelective(BuildingInfo record);
 
     int updateByPrimaryKey(BuildingInfo record);
+
+    List<BuildingBaseInfoBO> getBuildingInfoList(String buildingName);
+
+    List<BuildingInfo> checkBuildingName(Integer schoolId, String buildingName);
 }

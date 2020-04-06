@@ -1,8 +1,11 @@
 package com.classManage.tusdt.dao;
 
+import com.classManage.tusdt.model.BO.SchoolCatalogBO;
+import com.classManage.tusdt.model.BO.SchoolInfoListBO;
 import com.classManage.tusdt.model.SchoolInfo;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface SchoolInfoMapper {
 
@@ -17,4 +20,13 @@ public interface SchoolInfoMapper {
     int updateByPrimaryKeySelective(SchoolInfo record);
 
     int updateByPrimaryKey(SchoolInfo record);
+
+    List<SchoolCatalogBO> selectSchoolCatalog();
+
+    List<SchoolInfoListBO> selectSchoolInfoList(@Param("schoolName") String schoolName);
+
+    List<SchoolInfo> checkSchoolName(@Param("schoolName") String schoolName);
+
+    List<SchoolInfo> checkSchoolCode(@Param("schoolCode") String schoolCode);
+
 }

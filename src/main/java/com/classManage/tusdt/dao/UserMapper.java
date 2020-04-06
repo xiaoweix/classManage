@@ -21,5 +21,5 @@ public interface UserMapper {
 
     List<UserListBO> selectUserByName(@Param("userName") String userName);
 
-
+    Integer countBySchool(@Param("schoolId") Integer schoolId);
 }
