@@ -1,5 +1,7 @@
 package com.classManage.tusdt.model;
 
+import java.util.Date;
+
 public class CourseTimetabling {
     private Integer id;
 
@@ -7,21 +9,25 @@ public class CourseTimetabling {
 
     private Integer userId;
 
-    private Integer classId;
+    private Integer classId1;
 
-    private Integer roomId;
+    private Integer classId2;
 
-    private Integer year;
+    private Integer classId3;
 
-    private Integer month;
+    private Integer classId4;
 
-    private Integer week;
+    private Integer courseNum;
 
-    private Integer day;
+    private Integer buildingLayer;
 
-    private Integer courseTime;
+    private Date startTime;
+
+    private Date endTime;
 
     private Integer schoolId;
+
+    private String remark;
 
     private Integer isDelete;
 
@@ -49,60 +55,68 @@ public class CourseTimetabling {
         this.userId = userId;
     }
 
-    public Integer getClassId() {
-        return classId;
+    public Integer getClassId1() {
+        return classId1;
     }
 
-    public void setClassId(Integer classId) {
-        this.classId = classId;
+    public void setClassId1(Integer classId1) {
+        this.classId1 = classId1;
     }
 
-    public Integer getRoomId() {
-        return roomId;
+    public Integer getClassId2() {
+        return classId2;
     }
 
-    public void setRoomId(Integer roomId) {
-        this.roomId = roomId;
+    public void setClassId2(Integer classId2) {
+        this.classId2 = classId2;
     }
 
-    public Integer getYear() {
-        return year;
+    public Integer getClassId3() {
+        return classId3;
     }
 
-    public void setYear(Integer year) {
-        this.year = year;
+    public void setClassId3(Integer classId3) {
+        this.classId3 = classId3;
     }
 
-    public Integer getMonth() {
-        return month;
+    public Integer getClassId4() {
+        return classId4;
     }
 
-    public void setMonth(Integer month) {
-        this.month = month;
+    public void setClassId4(Integer classId4) {
+        this.classId4 = classId4;
     }
 
-    public Integer getWeek() {
-        return week;
+    public Integer getCourseNum() {
+        return courseNum;
     }
 
-    public void setWeek(Integer week) {
-        this.week = week;
+    public void setCourseNum(Integer courseNum) {
+        this.courseNum = courseNum;
     }
 
-    public Integer getDay() {
-        return day;
+    public Integer getBuildingLayer() {
+        return buildingLayer;
     }
 
-    public void setDay(Integer day) {
-        this.day = day;
+    public void setBuildingLayer(Integer buildingLayer) {
+        this.buildingLayer = buildingLayer;
     }
 
-    public Integer getCourseTime() {
-        return courseTime;
+    public Date getStartTime() {
+        return startTime;
     }
 
-    public void setCourseTime(Integer courseTime) {
-        this.courseTime = courseTime;
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 
     public Integer getSchoolId() {
@@ -111,6 +125,14 @@ public class CourseTimetabling {
 
     public void setSchoolId(Integer schoolId) {
         this.schoolId = schoolId;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
     }
 
     public Integer getIsDelete() {

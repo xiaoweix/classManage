@@ -6,7 +6,7 @@ import com.classManage.tusdt.dao.ClassroomInfoMapper;
 import com.classManage.tusdt.model.BO.ClassroomApplyListBO;
 import com.classManage.tusdt.model.BO.ClassroomNameBO;
 import com.classManage.tusdt.model.BO.DateStartAndEndBO;
-import com.classManage.tusdt.model.ClassApply;
+import com.classManage.tusdt.model.ClassroomApply;
 import com.classManage.tusdt.model.ClassroomInfo;
 import com.classManage.tusdt.service.ClassroomInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,30 +54,4 @@ public class ClassroomInfoServiceImpl implements ClassroomInfoService {
         return null;
     }
 
-    @Override
-    public List<ClassroomNameBO> getSingleTimeRoom(String dateFrom, String dateEnd, Integer stuNum, Integer buildId) {
-        return null;
-    }
-
-    @Override
-    public List<ClassroomNameBO> getMultiTimeRoom(List<DateStartAndEndBO> dateStartAndEndBOList) {
-        return null;
-    }
-
-    @Override
-    public ResponseData<String> applyClassroomForSingleTime(ClassApply classApply) {
-        ResponseData<String> responseData = new ResponseData<>();
-
-        return null;
-    }
-
-    @Override
-    public List<ClassroomApplyListBO> getRoomApplyList() {
-        return null;
-    }
-
-    @Override
-    public List<ClassroomApplyListBO> getRoomApplyList(Integer userId) {
-        return null;
-    }
 }

@@ -5,19 +5,21 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="course_id" property="courseId" jdbcType="INTEGER" />
     <result column="user_id" property="userId" jdbcType="INTEGER" />
-    <result column="class_id" property="classId" jdbcType="INTEGER" />
-    <result column="room_id" property="roomId" jdbcType="INTEGER" />
-    <result column="year" property="year" jdbcType="INTEGER" />
-    <result column="month" property="month" jdbcType="INTEGER" />
-    <result column="week" property="week" jdbcType="INTEGER" />
-    <result column="day" property="day" jdbcType="INTEGER" />
-    <result column="course_time" property="courseTime" jdbcType="INTEGER" />
+    <result column="class_id1" property="classId1" jdbcType="INTEGER" />
+    <result column="class_id2" property="classId2" jdbcType="INTEGER" />
+    <result column="class_id3" property="classId3" jdbcType="INTEGER" />
+    <result column="class_id4" property="classId4" jdbcType="INTEGER" />
+    <result column="course_num" property="courseNum" jdbcType="INTEGER" />
+    <result column="building_layer" property="buildingLayer" jdbcType="INTEGER" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
     <result column="school_id" property="schoolId" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="is_delete" property="isDelete" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, course_id, user_id, class_id, room_id, year, month, week, day, course_time, school_id, 
-    is_delete
+    id, course_id, user_id, class_id1, class_id2, class_id3, class_id4, course_num, building_layer, 
+    start_time, end_time, school_id, remark, is_delete
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -31,13 +33,15 @@
   </delete>
   <insert id="insert" parameterType="com.classManage.tusdt.model.CourseTimetabling" >
     insert into course_timetabling (id, course_id, user_id, 
-      class_id, room_id, year, 
-      month, week, day, course_time, 
-      school_id, is_delete)
+      class_id1, class_id2, class_id3, 
+      class_id4, course_num, building_layer, 
+      start_time, end_time, school_id, 
+      remark, is_delete)
     values (#{id,jdbcType=INTEGER}, #{courseId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, 
-      #{classId,jdbcType=INTEGER}, #{roomId,jdbcType=INTEGER}, #{year,jdbcType=INTEGER}, 
-      #{month,jdbcType=INTEGER}, #{week,jdbcType=INTEGER}, #{day,jdbcType=INTEGER}, #{courseTime,jdbcType=INTEGER}, 
-      #{schoolId,jdbcType=INTEGER}, #{isDelete,jdbcType=INTEGER})
+      #{classId1,jdbcType=INTEGER}, #{classId2,jdbcType=INTEGER}, #{classId3,jdbcType=INTEGER}, 
+      #{classId4,jdbcType=INTEGER}, #{courseNum,jdbcType=INTEGER}, #{buildingLayer,jdbcType=INTEGER}, 
+      #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{schoolId,jdbcType=INTEGER}, 
+      #{remark,jdbcType=VARCHAR}, #{isDelete,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.classManage.tusdt.model.CourseTimetabling" >
     insert into course_timetabling
@@ -51,29 +55,35 @@
       <if test="userId != null" >
         user_id,
       </if>
-      <if test="classId != null" >
-        class_id,
+      <if test="classId1 != null" >
+        class_id1,
       </if>
-      <if test="roomId != null" >
-        room_id,
+      <if test="classId2 != null" >
+        class_id2,
       </if>
-      <if test="year != null" >
-        year,
+      <if test="classId3 != null" >
+        class_id3,
       </if>
-      <if test="month != null" >
-        month,
+      <if test="classId4 != null" >
+        class_id4,
       </if>
-      <if test="week != null" >
-        week,
+      <if test="courseNum != null" >
+        course_num,
       </if>
-      <if test="day != null" >
-        day,
+      <if test="buildingLayer != null" >
+        building_layer,
       </if>
-      <if test="courseTime != null" >
-        course_time,
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="endTime != null" >
+        end_time,
       </if>
       <if test="schoolId != null" >
         school_id,
+      </if>
+      <if test="remark != null" >
+        remark,
       </if>
       <if test="isDelete != null" >
         is_delete,
@@ -89,29 +99,35 @@
       <if test="userId != null" >
         #{userId,jdbcType=INTEGER},
       </if>
-      <if test="classId != null" >
-        #{classId,jdbcType=INTEGER},
+      <if test="classId1 != null" >
+        #{classId1,jdbcType=INTEGER},
       </if>
-      <if test="roomId != null" >
-        #{roomId,jdbcType=INTEGER},
+      <if test="classId2 != null" >
+        #{classId2,jdbcType=INTEGER},
       </if>
-      <if test="year != null" >
-        #{year,jdbcType=INTEGER},
+      <if test="classId3 != null" >
+        #{classId3,jdbcType=INTEGER},
       </if>
-      <if test="month != null" >
-        #{month,jdbcType=INTEGER},
+      <if test="classId4 != null" >
+        #{classId4,jdbcType=INTEGER},
       </if>
-      <if test="week != null" >
-        #{week,jdbcType=INTEGER},
+      <if test="courseNum != null" >
+        #{courseNum,jdbcType=INTEGER},
       </if>
-      <if test="day != null" >
-        #{day,jdbcType=INTEGER},
+      <if test="buildingLayer != null" >
+        #{buildingLayer,jdbcType=INTEGER},
       </if>
-      <if test="courseTime != null" >
-        #{courseTime,jdbcType=INTEGER},
+      <if test="startTime != null" >
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=TIMESTAMP},
       </if>
       <if test="schoolId != null" >
         #{schoolId,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
       </if>
       <if test="isDelete != null" >
         #{isDelete,jdbcType=INTEGER},
@@ -127,29 +143,35 @@
       <if test="userId != null" >
         user_id = #{userId,jdbcType=INTEGER},
       </if>
-      <if test="classId != null" >
-        class_id = #{classId,jdbcType=INTEGER},
+      <if test="classId1 != null" >
+        class_id1 = #{classId1,jdbcType=INTEGER},
       </if>
-      <if test="roomId != null" >
-        room_id = #{roomId,jdbcType=INTEGER},
+      <if test="classId2 != null" >
+        class_id2 = #{classId2,jdbcType=INTEGER},
       </if>
-      <if test="year != null" >
-        year = #{year,jdbcType=INTEGER},
+      <if test="classId3 != null" >
+        class_id3 = #{classId3,jdbcType=INTEGER},
       </if>
-      <if test="month != null" >
-        month = #{month,jdbcType=INTEGER},
+      <if test="classId4 != null" >
+        class_id4 = #{classId4,jdbcType=INTEGER},
       </if>
-      <if test="week != null" >
-        week = #{week,jdbcType=INTEGER},
+      <if test="courseNum != null" >
+        course_num = #{courseNum,jdbcType=INTEGER},
       </if>
-      <if test="day != null" >
-        day = #{day,jdbcType=INTEGER},
+      <if test="buildingLayer != null" >
+        building_layer = #{buildingLayer,jdbcType=INTEGER},
       </if>
-      <if test="courseTime != null" >
-        course_time = #{courseTime,jdbcType=INTEGER},
+      <if test="startTime != null" >
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=TIMESTAMP},
       </if>
       <if test="schoolId != null" >
         school_id = #{schoolId,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
       </if>
       <if test="isDelete != null" >
         is_delete = #{isDelete,jdbcType=INTEGER},
@@ -161,15 +183,30 @@
     update course_timetabling
     set course_id = #{courseId,jdbcType=INTEGER},
       user_id = #{userId,jdbcType=INTEGER},
-      class_id = #{classId,jdbcType=INTEGER},
-      room_id = #{roomId,jdbcType=INTEGER},
-      year = #{year,jdbcType=INTEGER},
-      month = #{month,jdbcType=INTEGER},
-      week = #{week,jdbcType=INTEGER},
-      day = #{day,jdbcType=INTEGER},
-      course_time = #{courseTime,jdbcType=INTEGER},
+      class_id1 = #{classId1,jdbcType=INTEGER},
+      class_id2 = #{classId2,jdbcType=INTEGER},
+      class_id3 = #{classId3,jdbcType=INTEGER},
+      class_id4 = #{classId4,jdbcType=INTEGER},
+      course_num = #{courseNum,jdbcType=INTEGER},
+      building_layer = #{buildingLayer,jdbcType=INTEGER},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
       school_id = #{schoolId,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
       is_delete = #{isDelete,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="getCoursePlan" resultType="com.classManage.tusdt.model.BO.CoursePlanListBO">
+    select ct.id, ci.course_name courseName,ct.course_num courseNum,u.user_name userName, class_id1 classId1,class_id2 classId2,class_id3 classId3,class_id4 classId4,ct.remark
+    from course_timetabling ct, course_info ci, user u
+    where ct.is_delete = 0
+    and ct.course_id = ci.id
+    and ct.user_id = u.id
+    <if test="schoolId != null" >
+      and ct.school_id = #{schoolId,jdbcType=INTEGER}
+    </if>
+    <if test="courseName != null">
+      and course_name like CONCAT(CONCAT('%',#{courseName}),'%')
+    </if>
+  </select>
 </mapper>

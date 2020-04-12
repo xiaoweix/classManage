@@ -103,6 +103,7 @@
     select id, class_name className, class_number classNumber
     from class_info
     where is_delete = 0
+    and school_id = #{schoolId,jdbcType=INTEGER}
     <if test="className != null" >
       and class_name like CONCAT(CONCAT('%',#{className}),'%')
     </if>

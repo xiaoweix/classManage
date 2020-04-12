@@ -2,8 +2,6 @@ package com.classManage.tusdt.controller;
 
 import com.classManage.tusdt.base.common.ResponseData;
 import com.classManage.tusdt.base.constants.Response;
-import com.classManage.tusdt.model.BO.ClassroomNameBO;
-import com.classManage.tusdt.model.ClassInfo;
 import com.classManage.tusdt.model.ClassroomInfo;
 import com.classManage.tusdt.service.ClassroomInfoService;
 import io.swagger.annotations.*;
@@ -11,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 /**
  * Description:
@@ -76,27 +73,4 @@ public class ClassroomInfoController {
         return responseData;
     }
 
-    @ApiOperation(value = "获取单时间教室列表", notes = "")
-    @ApiResponses({@ApiResponse(code = Response.OK, message = "查询成功"),})
-    @ApiImplicitParams(
-            value = {
-                    @ApiImplicitParam(paramType = "header", name = "token", dataType = "String", required = true, value = "token"),
-            }
-    )
-    @RequestMapping(value = "/singleTimeRoom", method = RequestMethod.GET)
-    @ResponseBody
-    public ResponseData<List<ClassroomNameBO>> singleTimeRoom(HttpServletRequest request,
-                                                      @RequestParam(value = "stuNum",required = true) Integer stuNum,
-                                                      @RequestParam(value = "buildingId",required = false) Integer buildingId,
-                                                      @RequestParam(value = "startTime",required = true) String startTime,
-                                                      @RequestParam(value = "endTime",required = true) String endTime) {
-
-        ResponseData<List<ClassroomNameBO>> responseData = new ResponseData<>();
-        List<ClassroomNameBO> userList = classroomInfoService.getSingleTimeRoom(startTime,endTime,stuNum,buildingId);
-        if(userList == null || userList.size() == 0) {
-            responseData.setError("获取失败");
-        }
-        responseData.set("获取成功",userList);
-        return responseData;
-    }
 }

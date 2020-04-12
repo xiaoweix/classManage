@@ -21,5 +21,5 @@ public interface ClassInfoMapper {
 
     List<ClassInfo> checkClassName(@Param("schoolId") Integer schoolId, @Param("className") String className);
 
-    List<ClassBaseInfoListBO> getClassInfoList(String className);
+    List<ClassBaseInfoListBO> getClassInfoList(@Param("className") String className,@Param("schoolId") Integer schoolId);
 }

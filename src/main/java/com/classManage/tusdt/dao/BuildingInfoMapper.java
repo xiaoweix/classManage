@@ -19,7 +19,7 @@ public interface BuildingInfoMapper {
 
     int updateByPrimaryKey(BuildingInfo record);
 
-    List<BuildingBaseInfoBO> getBuildingInfoList(String buildingName);
+    List<BuildingBaseInfoBO> getBuildingInfoList(@Param("buildingName") String buildingName,@Param("schoolId") Integer schoolId);
 
     List<BuildingInfo> checkBuildingName(Integer schoolId, String buildingName);
 }

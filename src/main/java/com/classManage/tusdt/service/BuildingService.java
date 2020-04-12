@@ -20,7 +20,7 @@ public interface BuildingService {
 
     ResponseData<String> removeBuilding(Integer buildingId);
 
-    List<BuildingBaseInfoBO> getBuildingBaseInfo(String buildingName);
+    List<BuildingBaseInfoBO> getBuildingBaseInfo(String buildingName,Integer schoolId);
 
     boolean checkBuildingName(Integer schoolId, String buildingName);
 }

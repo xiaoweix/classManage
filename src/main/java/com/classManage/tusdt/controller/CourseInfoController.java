@@ -1,10 +1,99 @@
 package com.classManage.tusdt.controller;
 
+import com.classManage.tusdt.base.common.ResponseData;
+import com.classManage.tusdt.base.constants.Response;
+import com.classManage.tusdt.model.BO.CourseBaseInfoBO;
+import com.classManage.tusdt.model.CourseInfo;
+import com.classManage.tusdt.service.CourseInfoService;
+import io.swagger.annotations.*;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+
 /**
  * Description:
  * Author: xxw
  * Date: 2020-04-04
  * Time: 20:04
  */
+@Api(protocols = "http,https", tags = {"CourseManage"}, value = "/class_manage/course",description = "课程信息管理")
+@RestController
+@RequestMapping(value = "/class_manage/course")
 public class CourseInfoController {
+
+    @Resource
+    private CourseInfoService courseInfoService;
+
+    @ApiOperation(value = "新增一个课程信息", notes = "增加课程")
+    @ApiResponses({@ApiResponse(code = Response.OK, message = "添加成功"),})
+    @ApiImplicitParams(
+            value = {
+                    @ApiImplicitParam(paramType = "header", name = "token", dataType = "String", required = true, value = "token"),
+            }
+    )
+    @RequestMapping(value = "/addCourse", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<String> addCourse(@RequestBody CourseInfo courseInfo) {
+
+        ResponseData<String> responseData;
+        responseData = courseInfoService.addCourse(courseInfo);
+        return responseData;
+    }
+
+    @ApiOperation(value = "删除课程", notes = "删除课程")
+    @ApiResponses({@ApiResponse(code = Response.OK, message = "删除成功"),})
+    @ApiImplicitParams(
+            value = {
+                    @ApiImplicitParam(paramType = "header", name = "token", dataType = "String", required = true, value = "token"),
+            }
+    )
+    @RequestMapping(value = "/removeCourse", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseData<String> removeCourse(HttpServletRequest request,
+                                               @RequestParam(value = "courseId",required = true) Integer courseId) {
+
+        ResponseData<String> responseData = courseInfoService.removeCourse(courseId);
+        return responseData;
+    }
+
+    @ApiOperation(value = "编辑课程资料", notes = "编辑课程资料")
+    @ApiResponses({@ApiResponse(code = Response.OK, message = "修改成功"),})
+    @ApiImplicitParams(
+            value = {
+                    @ApiImplicitParam(paramType = "header", name = "token", dataType = "String", required = true, value = "token"),
+            }
+    )
+    @RequestMapping(value = "/modifyCourse", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<String> modifyCourse(@RequestBody CourseInfo courseInfo) {
+
+        ResponseData<String> responseData;
+        responseData = courseInfoService.modifyCourse(courseInfo);
+        return responseData;
+    }
+
+    @ApiOperation(value = "获取课程列表", notes = "")
+    @ApiResponses({@ApiResponse(code = Response.OK, message = "查询成功"),})
+    @ApiImplicitParams(
+            value = {
+                    @ApiImplicitParam(paramType = "header", name = "token", dataType = "String", required = true, value = "token"),
+            }
+    )
+    @RequestMapping(value = "/getCourseList", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseData<List<CourseBaseInfoBO>> getCourseList(HttpServletRequest request,
+                                                              @RequestParam(value = "courseName",required = false) String courseName,
+                                                              @RequestParam(value = "schoolId",required = true) Integer schoolId) {
+
+        ResponseData<List<CourseBaseInfoBO>> responseData = new ResponseData<>();
+        List<CourseBaseInfoBO> courseList = courseInfoService.getCourseList(courseName, schoolId);
+        if(courseList == null ) {
+            responseData.setError("获取失败");
+            return responseData;
+        }
+        responseData.set("获取成功",courseList);
+        return responseData;
+    }
 }

@@ -21,7 +21,7 @@ public interface ClassInfoService {
 
     ResponseData<String> removeClass(Integer classId);
 
-    List<ClassBaseInfoListBO> getClassBaseInfo(String className);
+    List<ClassBaseInfoListBO> getClassBaseInfo(String className, Integer schoolId);
 
     boolean checkClassName(Integer schoolId, String className);
 }

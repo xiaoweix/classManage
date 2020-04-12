@@ -1,23 +1,27 @@
 package com.classManage.tusdt.model;
 
+import java.util.Date;
+
 public class ClassroomApply {
     private Integer id;
 
-    private Integer courseId;
+    private Integer applyType;
 
-    private Integer userId;
+    private String purpose;
+
+    private Date applyTime;
+
+    private Date startTime;
+
+    private Date endTime;
+
+    private Integer useNum;
 
     private Integer roomId;
 
-    private Integer year;
+    private Integer userId;
 
-    private Integer month;
-
-    private Integer week;
-
-    private Integer day;
-
-    private Integer courseTime;
+    private Integer result;
 
     private String remark;
 
@@ -31,20 +35,52 @@ public class ClassroomApply {
         this.id = id;
     }
 
-    public Integer getCourseId() {
-        return courseId;
+    public Integer getApplyType() {
+        return applyType;
     }
 
-    public void setCourseId(Integer courseId) {
-        this.courseId = courseId;
+    public void setApplyType(Integer applyType) {
+        this.applyType = applyType;
     }
 
-    public Integer getUserId() {
-        return userId;
+    public String getPurpose() {
+        return purpose;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setPurpose(String purpose) {
+        this.purpose = purpose == null ? null : purpose.trim();
+    }
+
+    public Date getApplyTime() {
+        return applyTime;
+    }
+
+    public void setApplyTime(Date applyTime) {
+        this.applyTime = applyTime;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public Integer getUseNum() {
+        return useNum;
+    }
+
+    public void setUseNum(Integer useNum) {
+        this.useNum = useNum;
     }
 
     public Integer getRoomId() {
@@ -55,44 +91,20 @@ public class ClassroomApply {
         this.roomId = roomId;
     }
 
-    public Integer getYear() {
-        return year;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setYear(Integer year) {
-        this.year = year;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
-    public Integer getMonth() {
-        return month;
+    public Integer getResult() {
+        return result;
     }
 
-    public void setMonth(Integer month) {
-        this.month = month;
-    }
-
-    public Integer getWeek() {
-        return week;
-    }
-
-    public void setWeek(Integer week) {
-        this.week = week;
-    }
-
-    public Integer getDay() {
-        return day;
-    }
-
-    public void setDay(Integer day) {
-        this.day = day;
-    }
-
-    public Integer getCourseTime() {
-        return courseTime;
-    }
-
-    public void setCourseTime(Integer courseTime) {
-        this.courseTime = courseTime;
+    public void setResult(Integer result) {
+        this.result = result;
     }
 
     public String getRemark() {

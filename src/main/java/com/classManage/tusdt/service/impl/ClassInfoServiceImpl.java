@@ -83,9 +83,9 @@ public class ClassInfoServiceImpl implements ClassInfoService {
     }
 
     @Override
-    public List<ClassBaseInfoListBO> getClassBaseInfo(String className) {
+    public List<ClassBaseInfoListBO> getClassBaseInfo(String className, Integer schoolId) {
 
-        return classInfoMapper.getClassInfoList(className);
+        return classInfoMapper.getClassInfoList(className, schoolId);
     }
 
     @Override

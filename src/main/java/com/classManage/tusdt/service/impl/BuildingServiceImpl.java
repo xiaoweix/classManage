@@ -85,9 +85,9 @@ public class BuildingServiceImpl implements BuildingService {
     }
 
     @Override
-    public List<BuildingBaseInfoBO> getBuildingBaseInfo(String buildingName) {
+    public List<BuildingBaseInfoBO> getBuildingBaseInfo(String buildingName,Integer schoolId) {
 
-        return buildingInfoMapper.getBuildingInfoList(buildingName);
+        return buildingInfoMapper.getBuildingInfoList(buildingName,schoolId);
     }
 
     @Override

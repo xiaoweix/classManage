@@ -114,4 +114,22 @@
       is_delete = #{isDelete,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="getCourseListByName" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from course_info
+    where is_delete = 0
+    and course_name = #{courseName,jdbcType=VARCHAR}
+  </select>
+
+  <select id="getCourseBaseInfo" resultType="com.classManage.tusdt.model.BO.CourseBaseInfoBO">
+    select
+    id, course_name courseName, course_num courseNum
+    from course_info
+    where is_delete = 0
+    and school_id = #{schoolId,jdbcType=INTEGER}
+    <if test="courseName != null">
+      and course_name like CONCAT(CONCAT('%',#{courseName}),'%')
+    </if>
+  </select>
 </mapper>

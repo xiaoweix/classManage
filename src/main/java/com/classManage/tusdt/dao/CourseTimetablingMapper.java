@@ -1,11 +1,11 @@
 package com.classManage.tusdt.dao;
 
+import com.classManage.tusdt.model.BO.CoursePlanListBO;
 import com.classManage.tusdt.model.CourseTimetabling;
+
 import java.util.List;
-import org.apache.ibatis.annotations.Param;
 
 public interface CourseTimetablingMapper {
-
     int deleteByPrimaryKey(Integer id);
 
     int insert(CourseTimetabling record);
@@ -17,4 +17,6 @@ public interface CourseTimetablingMapper {
     int updateByPrimaryKeySelective(CourseTimetabling record);
 
     int updateByPrimaryKey(CourseTimetabling record);
+
+    List<CoursePlanListBO> getCoursePlan(Integer schoolId, String courseName);
 }

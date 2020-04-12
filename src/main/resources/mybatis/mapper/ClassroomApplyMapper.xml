@@ -3,19 +3,21 @@
 <mapper namespace="com.classManage.tusdt.dao.ClassroomApplyMapper" >
   <resultMap id="BaseResultMap" type="com.classManage.tusdt.model.ClassroomApply" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="course_id" property="courseId" jdbcType="INTEGER" />
-    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="apply_type" property="applyType" jdbcType="INTEGER" />
+    <result column="purpose" property="purpose" jdbcType="VARCHAR" />
+    <result column="apply_time" property="applyTime" jdbcType="TIMESTAMP" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="use_num" property="useNum" jdbcType="INTEGER" />
     <result column="room_id" property="roomId" jdbcType="INTEGER" />
-    <result column="year" property="year" jdbcType="INTEGER" />
-    <result column="month" property="month" jdbcType="INTEGER" />
-    <result column="week" property="week" jdbcType="INTEGER" />
-    <result column="day" property="day" jdbcType="INTEGER" />
-    <result column="course_time" property="courseTime" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="result" property="result" jdbcType="INTEGER" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="is_delete" property="isDelete" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, course_id, user_id, room_id, year, month, week, day, course_time, remark, is_delete
+    id, apply_type, purpose, apply_time, start_time, end_time, use_num, room_id, user_id, 
+    result, remark, is_delete
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -28,14 +30,16 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.classManage.tusdt.model.ClassroomApply" >
-    insert into classroom_apply (id, course_id, user_id, 
-      room_id, year, month, 
-      week, day, course_time, 
-      remark, is_delete)
-    values (#{id,jdbcType=INTEGER}, #{courseId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, 
-      #{roomId,jdbcType=INTEGER}, #{year,jdbcType=INTEGER}, #{month,jdbcType=INTEGER}, 
-      #{week,jdbcType=INTEGER}, #{day,jdbcType=INTEGER}, #{courseTime,jdbcType=INTEGER}, 
-      #{remark,jdbcType=VARCHAR}, #{isDelete,jdbcType=INTEGER})
+    insert into classroom_apply (id, apply_type, purpose, 
+      apply_time, start_time, end_time, 
+      use_num, room_id, user_id, 
+      result, remark, is_delete
+      )
+    values (#{id,jdbcType=INTEGER}, #{applyType,jdbcType=INTEGER}, #{purpose,jdbcType=VARCHAR}, 
+      #{applyTime,jdbcType=TIMESTAMP}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
+      #{useNum,jdbcType=INTEGER}, #{roomId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, 
+      #{result,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{isDelete,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.classManage.tusdt.model.ClassroomApply" >
     insert into classroom_apply
@@ -43,29 +47,32 @@
       <if test="id != null" >
         id,
       </if>
-      <if test="courseId != null" >
-        course_id,
+      <if test="applyType != null" >
+        apply_type,
       </if>
-      <if test="userId != null" >
-        user_id,
+      <if test="purpose != null" >
+        purpose,
+      </if>
+      <if test="applyTime != null" >
+        apply_time,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="useNum != null" >
+        use_num,
       </if>
       <if test="roomId != null" >
         room_id,
       </if>
-      <if test="year != null" >
-        year,
+      <if test="userId != null" >
+        user_id,
       </if>
-      <if test="month != null" >
-        month,
-      </if>
-      <if test="week != null" >
-        week,
-      </if>
-      <if test="day != null" >
-        day,
-      </if>
-      <if test="courseTime != null" >
-        course_time,
+      <if test="result != null" >
+        result,
       </if>
       <if test="remark != null" >
         remark,
@@ -78,29 +85,32 @@
       <if test="id != null" >
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="courseId != null" >
-        #{courseId,jdbcType=INTEGER},
+      <if test="applyType != null" >
+        #{applyType,jdbcType=INTEGER},
       </if>
-      <if test="userId != null" >
-        #{userId,jdbcType=INTEGER},
+      <if test="purpose != null" >
+        #{purpose,jdbcType=VARCHAR},
+      </if>
+      <if test="applyTime != null" >
+        #{applyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="useNum != null" >
+        #{useNum,jdbcType=INTEGER},
       </if>
       <if test="roomId != null" >
         #{roomId,jdbcType=INTEGER},
       </if>
-      <if test="year != null" >
-        #{year,jdbcType=INTEGER},
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
       </if>
-      <if test="month != null" >
-        #{month,jdbcType=INTEGER},
-      </if>
-      <if test="week != null" >
-        #{week,jdbcType=INTEGER},
-      </if>
-      <if test="day != null" >
-        #{day,jdbcType=INTEGER},
-      </if>
-      <if test="courseTime != null" >
-        #{courseTime,jdbcType=INTEGER},
+      <if test="result != null" >
+        #{result,jdbcType=INTEGER},
       </if>
       <if test="remark != null" >
         #{remark,jdbcType=VARCHAR},
@@ -113,29 +123,32 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.classManage.tusdt.model.ClassroomApply" >
     update classroom_apply
     <set >
-      <if test="courseId != null" >
-        course_id = #{courseId,jdbcType=INTEGER},
+      <if test="applyType != null" >
+        apply_type = #{applyType,jdbcType=INTEGER},
       </if>
-      <if test="userId != null" >
-        user_id = #{userId,jdbcType=INTEGER},
+      <if test="purpose != null" >
+        purpose = #{purpose,jdbcType=VARCHAR},
+      </if>
+      <if test="applyTime != null" >
+        apply_time = #{applyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startTime != null" >
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="useNum != null" >
+        use_num = #{useNum,jdbcType=INTEGER},
       </if>
       <if test="roomId != null" >
         room_id = #{roomId,jdbcType=INTEGER},
       </if>
-      <if test="year != null" >
-        year = #{year,jdbcType=INTEGER},
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
       </if>
-      <if test="month != null" >
-        month = #{month,jdbcType=INTEGER},
-      </if>
-      <if test="week != null" >
-        week = #{week,jdbcType=INTEGER},
-      </if>
-      <if test="day != null" >
-        day = #{day,jdbcType=INTEGER},
-      </if>
-      <if test="courseTime != null" >
-        course_time = #{courseTime,jdbcType=INTEGER},
+      <if test="result != null" >
+        result = #{result,jdbcType=INTEGER},
       </if>
       <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},
@@ -148,16 +161,46 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.classManage.tusdt.model.ClassroomApply" >
     update classroom_apply
-    set course_id = #{courseId,jdbcType=INTEGER},
-      user_id = #{userId,jdbcType=INTEGER},
+    set apply_type = #{applyType,jdbcType=INTEGER},
+      purpose = #{purpose,jdbcType=VARCHAR},
+      apply_time = #{applyTime,jdbcType=TIMESTAMP},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      use_num = #{useNum,jdbcType=INTEGER},
       room_id = #{roomId,jdbcType=INTEGER},
-      year = #{year,jdbcType=INTEGER},
-      month = #{month,jdbcType=INTEGER},
-      week = #{week,jdbcType=INTEGER},
-      day = #{day,jdbcType=INTEGER},
-      course_time = #{courseTime,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
+      result = #{result,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
       is_delete = #{isDelete,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="getOwnApplyClassroom" resultType="com.classManage.tusdt.model.BO.OwnClassroomApplyListBO">
+    SELECT
+    ca.id id,
+    apply_type applyType,
+    purpose,
+    apply_time applyTime,
+    ci.room_name classroomName,
+    ca.result
+    FROM
+    classroom_apply ca,
+    classroom_info ci
+    WHERE
+    ca.is_delete = 0
+    AND ci.is_delete = 0
+    AND ca.room_id = ci.id
+    and ca.user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  <select id="getAdminApplyClassroom" resultType="com.classManage.tusdt.model.BO.ClassroomApplyListBO">
+    select ca.id, ca.purpose, ca.apply_time applyTime, ca.start_time startTime, ca.end_time endTime, ca.use_num useNum,
+    ci.room_name roomName, u.user_name userName, u.job_level userJobLevel, ca.result
+    from classroom_apply ca, classroom_info ci, user u
+    where ca.is_delete = 0
+    AND ci.is_delete = 0
+    AND ca.room_id = ci.id
+    and u.id = ca.user_id
+    <if test="result != null" >
+      result = #{result,jdbcType=INTEGER},
+    </if>
+  </select>
 </mapper>
