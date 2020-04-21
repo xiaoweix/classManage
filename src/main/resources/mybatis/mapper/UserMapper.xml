@@ -14,8 +14,8 @@
     <result column="is_delete" property="isDelete" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, user_name, password, email, job_level, status, class_id, school_id, create_time, 
-    is_delete
+    id, user_name userName, password, email, job_level jobLevel, status, class_id classId, school_id schoolId, create_time createTime,
+    is_delete isDelete
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -159,5 +159,12 @@
   </select>
   <select id="countBySchool" resultType="java.lang.Integer">
     select count(1) from user where  school_id = #{schoolId,jdbcType=INTEGER}
+  </select>
+  <select id="loginByEmail" resultType="com.classManage.tusdt.model.User">
+    select
+    <include refid="Base_Column_List"/>
+    from user
+    where is_delete = 0
+    and email = #{email,jdbcType=VARCHAR}
   </select>
 </mapper>

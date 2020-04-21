@@ -21,6 +21,16 @@ public class CommonConstant {
     public static final Integer DELETED_NO = 0;
 
     /**
+     * 用户状态 0:正常 1 正常 2未审核 Unaudited
+     */
+    public static final Integer USER_STATUS_NORMAL = 0;
+
+    public static final Integer USER_STATUS_ABNORMAL = 1;
+
+    public static final Integer USER_STATUS_UNAUDITED = 2;
+
+
+    /**
      * 预约教室类型 单时间预约single
      */
     public static final Integer  CLASSROOM_APPLY_TYPE_SINGLE_TIME = 0;
@@ -49,4 +59,9 @@ public class CommonConstant {
      * 当教室被借的时候 课程id为0
      */
     public static final Integer CLASSROOM_USING_LEND_COURSEID = 0;
+
+    /**
+     * 加密算法的名字
+     */
+    public static final String PASSWORD_HASH = "SHA-256";
 }

@@ -6,6 +6,7 @@ import com.classManage.tusdt.dao.UserMapper;
 import com.classManage.tusdt.model.BO.UserListBO;
 import com.classManage.tusdt.model.User;
 import com.classManage.tusdt.service.UserInfoService;
+import com.classManage.tusdt.utils.HashUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +32,8 @@ public class UserInfoServiceImpl implements UserInfoService {
 
         user.setIsDelete(CommonConstant.DELETED_NO);
         user.setCreateTime(new Date());
+        String password = user.getPassword();
+        user.setPassword(HashUtils.hashEncrypt(password,"SHA-256"));
         userMapper.insert(user);
         responseData.setOK("添加成功");
         return responseData;
