@@ -12,7 +12,7 @@
     <result column="is_delete" property="isDelete" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, room_name, address, room_layer, room_capacity, building_id, school_id, is_delete
+    id, room_name roomName, address, room_layer roomLayer, room_capacity roomCapacity, building_id buildingId, school_id schoolId, is_delete isDelete
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -125,4 +125,15 @@
       is_delete = #{isDelete,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="getClassroomBySchoolID" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from classroom_info
+    where is_delete = 0
+    and school_id = #{schoolId,jdbcType=INTEGER}
+    and room_capacity > #{roomCapacity,jdbcType=INTEGER}
+    <if test="roomLayer != null">
+      and room_layer = #{roomLayer,jdbcType=INTEGER}
+    </if>
+  </select>
 </mapper>

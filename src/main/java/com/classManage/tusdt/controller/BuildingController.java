@@ -87,10 +87,10 @@ public class BuildingController {
     @RequestMapping(value = "/getBuildingList", method = RequestMethod.GET)
     @ResponseBody
     public ResponseData<List<BuildingBaseInfoBO>> getBuildingList(HttpServletRequest request,
-                                                                  @RequestParam(value = "buildingName",required = false) String buildingName,
-                                                                  @RequestParam(value = "schoolId",required = true) Integer schoolId) {
+                                                                  @RequestParam(value = "buildingName",required = false) String buildingName) {
 
         ResponseData<List<BuildingBaseInfoBO>> responseData = new ResponseData<>();
+        Integer schoolId = (Integer) request.getAttribute("schoolId");
         List<BuildingBaseInfoBO> buildingInfoList = buildingService.getBuildingBaseInfo(buildingName, schoolId);
         if(buildingInfoList == null ) {
             responseData.setError("获取失败");

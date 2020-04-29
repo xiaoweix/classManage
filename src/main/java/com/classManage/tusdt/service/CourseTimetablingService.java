@@ -17,4 +17,8 @@ public interface CourseTimetablingService {
     ResponseData<String> addCoursePlan(CourseTimetabling courseTimetabling);
 
     List<CoursePlanListBO> getCoursePlan(Integer schoolId, String courseName );
+
+    ResponseData<String> dealCoursePlan(Integer courseTimetablingId);
+
+    ResponseData<String> disagreeCoursePlan(Integer courseTimetablingId);
 }

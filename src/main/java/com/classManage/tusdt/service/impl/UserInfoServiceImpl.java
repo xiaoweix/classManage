@@ -29,7 +29,12 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public ResponseData<String> addUser(User user) {
         ResponseData<String> responseData = new ResponseData<>();
+        User checkUserEmail = userMapper.loginByEmail(user.getEmail());
 
+        if(checkUserEmail != null) {
+            responseData.setError("该用户邮箱已存在！");
+            return responseData;
+        }
         user.setIsDelete(CommonConstant.DELETED_NO);
         user.setCreateTime(new Date());
         String password = user.getPassword();
@@ -63,6 +68,16 @@ public class UserInfoServiceImpl implements UserInfoService {
         ResponseData<String> responseData = new ResponseData<>();
         userMapper.updateByPrimaryKeySelective(user);
         responseData.setOK("修改成功");
+        return responseData;
+    }
+
+    @Override
+    public ResponseData<String> agreeUserApply(Integer userId) {
+        ResponseData<String> responseData = new ResponseData<>();
+        User user = userMapper.selectByPrimaryKey(userId);
+        user.setStatus(CommonConstant.USER_STATUS_NORMAL);
+        userMapper.updateByPrimaryKeySelective(user);
+        responseData.setOK("操作成功！");
         return responseData;
     }
 }

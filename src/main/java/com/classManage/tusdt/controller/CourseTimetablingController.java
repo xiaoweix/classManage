@@ -54,10 +54,10 @@ public class CourseTimetablingController {
     @RequestMapping(value = "/adminCoursePlanList", method = RequestMethod.GET)
     @ResponseBody
     public ResponseData<List<CoursePlanListBO>> adminCoursePlanList(HttpServletRequest request,
-                                                              @RequestParam(value = "courseName",required = false) String courseName,
-                                                              @RequestParam(value = "schoolId",required = true) Integer schoolId) {
+                                                              @RequestParam(value = "courseName",required = false) String courseName) {
 
         ResponseData<List<CoursePlanListBO>> responseData = new ResponseData<>();
+        Integer schoolId = (Integer) request.getAttribute("schoolId");
         List<CoursePlanListBO> courseList = courseTimetablingService.getCoursePlan(schoolId, courseName);
         if(courseList == null ) {
             responseData.setError("获取失败");
@@ -66,4 +66,35 @@ public class CourseTimetablingController {
         responseData.set("获取成功",courseList);
         return responseData;
     }
+    @ApiOperation(value = "同意排课安排", notes = "")
+    @ApiResponses({@ApiResponse(code = Response.OK, message = "查询成功"),})
+    @ApiImplicitParams(
+            value = {
+                    @ApiImplicitParam(paramType = "header", name = "token", dataType = "String", required = true, value = "token"),
+            }
+    )
+    @RequestMapping(value = "/adminAgreeCourseApply", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseData<String> adminAgreeCourseApply(HttpServletRequest request,
+                                                         @RequestParam(value = "courseTimetablingId",required = true) Integer courseTimetablingId) {
+
+        return courseTimetablingService.dealCoursePlan(courseTimetablingId);
+    }
+
+
+    @ApiOperation(value = "驳回排课安排", notes = "")
+    @ApiResponses({@ApiResponse(code = Response.OK, message = "查询成功"),})
+    @ApiImplicitParams(
+            value = {
+                    @ApiImplicitParam(paramType = "header", name = "token", dataType = "String", required = true, value = "token"),
+            }
+    )
+    @RequestMapping(value = "/adminDisagreeCourseApply", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseData<String> adminDisagreeCourseApply(HttpServletRequest request,
+                                                            @RequestParam(value = "courseTimetablingId",required = true) Integer courseTimetablingId) {
+
+        return courseTimetablingService.disagreeCoursePlan(courseTimetablingId);
+    }
+
 }

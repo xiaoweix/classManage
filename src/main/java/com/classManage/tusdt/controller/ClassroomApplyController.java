@@ -42,10 +42,10 @@ public class ClassroomApplyController {
                                                               @RequestParam(value = "stuNum",required = true) Integer stuNum,
                                                               @RequestParam(value = "buildingId",required = false) Integer buildingId,
                                                               @RequestParam(value = "startTime",required = true) String startTime,
-                                                              @RequestParam(value = "endTime",required = true) String endTime,
-                                                              @RequestParam(value = "schoolId",required = true) Integer schoolId) {
+                                                              @RequestParam(value = "endTime",required = true) String endTime) {
 
         ResponseData<List<ClassroomNameBO>> responseData = new ResponseData<>();
+        Integer schoolId = (Integer) request.getAttribute("schoolId");
         responseData = classroomApplyService.getSingleTimeRoom(startTime,endTime,schoolId,stuNum,buildingId);
         return responseData;
     }
@@ -89,7 +89,7 @@ public class ClassroomApplyController {
 
 
 
-    @ApiOperation(value = "获取自己的申请列表（管理员界面）", notes = "")
+    @ApiOperation(value = "获取申请列表（管理员界面）", notes = "")
     @ApiResponses({@ApiResponse(code = Response.OK, message = "查询成功"),})
     @ApiImplicitParams(
             value = {

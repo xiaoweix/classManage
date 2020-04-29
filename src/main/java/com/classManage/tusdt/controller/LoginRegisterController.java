@@ -2,6 +2,7 @@ package com.classManage.tusdt.controller;
 
 import com.classManage.tusdt.base.common.ResponseData;
 import com.classManage.tusdt.base.constants.Response;
+import com.classManage.tusdt.model.BO.UserLoginBO;
 import com.classManage.tusdt.model.User;
 import com.classManage.tusdt.service.LoginRegisterService;
 import io.swagger.annotations.*;
@@ -27,14 +28,12 @@ public class LoginRegisterController {
     @ApiResponses({@ApiResponse(code = Response.OK, message = "登陆成功"),})
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     @ResponseBody
-    public String removeUser(HttpServletRequest request,
-                                           @RequestParam(value = "email",required = true) String email,
-                                           @RequestParam(value = "password",required = true) String password
+    public ResponseData<UserLoginBO> login(HttpServletRequest request,
+                                                @RequestParam(value = "email",required = true) String email,
+                                                @RequestParam(value = "password",required = true) String password
                                             ) {
 
-        String token = loginRegisterService.login(email,password);
-
-        return token;
+        return loginRegisterService.login(email,password);
     }
 
     @ApiOperation(value = "注册", notes = "注册")

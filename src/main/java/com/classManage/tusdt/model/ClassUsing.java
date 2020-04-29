@@ -21,6 +21,21 @@ public class ClassUsing {
 
     private Integer isDelete;
 
+    public ClassUsing() {
+    }
+
+    public ClassUsing(Integer courseId, Integer userId, Integer roomId, Integer year, Integer month, Integer day, Integer courseTime, String remark, Integer isDelete) {
+        this.courseId = courseId;
+        this.userId = userId;
+        this.roomId = roomId;
+        this.year = year;
+        this.month = month;
+        this.day = day;
+        this.courseTime = courseTime;
+        this.remark = remark;
+        this.isDelete = isDelete;
+    }
+
     public Integer getId() {
         return id;
     }

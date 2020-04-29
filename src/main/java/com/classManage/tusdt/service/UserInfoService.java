@@ -21,4 +21,6 @@ public interface UserInfoService {
     ResponseData<String> removeUser(Integer userId);
 
     ResponseData<String> modifyUser(User user);
+
+    ResponseData<String> agreeUserApply(Integer userId);
 }

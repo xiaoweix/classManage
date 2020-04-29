@@ -1,6 +1,7 @@
 package com.classManage.tusdt.service;
 
 import com.classManage.tusdt.base.common.ResponseData;
+import com.classManage.tusdt.model.BO.UserLoginBO;
 import com.classManage.tusdt.model.User;
 
 /**
@@ -11,7 +12,7 @@ import com.classManage.tusdt.model.User;
  */
 public interface LoginRegisterService {
 
-    String login(String email, String password);
+    ResponseData<UserLoginBO> login(String email, String password);
 
     ResponseData<String> register(User user);
 }

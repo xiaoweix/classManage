@@ -28,4 +28,6 @@ public interface SchoolInfoService {
     boolean checkSchoolName(String schoolName);
 
     boolean checkSchoolCode(String schoolCode);
+
+    boolean checkSchoolStudent(Integer schoolId);
 }

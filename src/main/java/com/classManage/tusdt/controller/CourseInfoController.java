@@ -84,10 +84,10 @@ public class CourseInfoController {
     @RequestMapping(value = "/getCourseList", method = RequestMethod.GET)
     @ResponseBody
     public ResponseData<List<CourseBaseInfoBO>> getCourseList(HttpServletRequest request,
-                                                              @RequestParam(value = "courseName",required = false) String courseName,
-                                                              @RequestParam(value = "schoolId",required = true) Integer schoolId) {
+                                                              @RequestParam(value = "courseName",required = false) String courseName) {
 
         ResponseData<List<CourseBaseInfoBO>> responseData = new ResponseData<>();
+        Integer schoolId = (Integer) request.getAttribute("schoolId");
         List<CourseBaseInfoBO> courseList = courseInfoService.getCourseList(courseName, schoolId);
         if(courseList == null ) {
             responseData.setError("获取失败");

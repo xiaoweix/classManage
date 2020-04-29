@@ -42,16 +42,4 @@ public class HashUtils {
         }
         return strBuffer.toString();
     }
-
-
-
-    public static void main(String[] args) {
-
-        String password1 = "xxw123";
-        String password2 = "xxw124";
-        HashUtils hashUtils = new HashUtils();
-        System.out.println(hashUtils.hashEncrypt(password1,"SHA-256"));
-        System.out.println(hashUtils.hashEncrypt(password2,"SHA-256"));
-
-    }
 }

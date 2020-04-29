@@ -44,6 +44,7 @@ public class ClassroomApplyServiceImpl implements ClassroomApplyService {
         Date startTime = null;
         Date endTime = null;
         try{
+            //将时间格式化
             startTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateFrom);
             endTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateEnd);
         } catch (Exception e) {
@@ -51,11 +52,16 @@ public class ClassroomApplyServiceImpl implements ClassroomApplyService {
         }
 
         timeCal.setTime(startTime);
+        //获取到年份
         Integer year = timeCal.get(Calendar.YEAR);
+        //获取月份
         Integer month = timeCal.get(Calendar.MONTH) + 1;
+        //获取天
         Integer day = timeCal.get(Calendar.DATE);
+        //获取开始的小时
         Integer startCourse = timeCal.get(Calendar.HOUR);
         timeCal.setTime(endTime);
+        //获取结束的小时
         Integer endCourse = timeCal.get(Calendar.HOUR);
         if(startCourse > endCourse) {
             responseData.setError("开始时间大于结束时间");
@@ -75,6 +81,7 @@ public class ClassroomApplyServiceImpl implements ClassroomApplyService {
     public ResponseData<String> submitApply(ClassroomApply classroomApply) {
         ResponseData<String> responseData = new ResponseData<>();
         classroomApply.setIsDelete(CommonConstant.DELETED_NO);
+        //设置申请结果状态为等待审核
         classroomApply.setResult(CommonConstant.CLASSROOM_APPLY_RESULT_WAIT);
         classroomApplyMapper.insert(classroomApply);
         responseData.setOK("提交成功！");
@@ -123,14 +130,9 @@ public class ClassroomApplyServiceImpl implements ClassroomApplyService {
             Date startTime = classroomApply.getStartTime();
             Calendar startTimeCal = Calendar.getInstance();
             startTimeCal.setTime(startTime);
-
+            //设置教室使用的基本信息
             classUsing.setRoomId(classroomApply.getRoomId());
-
             classUsing.setYear(startTimeCal.get(Calendar.YEAR));
-            System.out.println(startTimeCal.get(Calendar.YEAR));
-            System.out.println(startTimeCal.get(Calendar.MONTH));
-            System.out.println(startTimeCal.get(Calendar.DATE));
-
             classUsing.setMonth(startTimeCal.get(Calendar.MONTH)+1);
             classUsing.setDay(startTimeCal.get(Calendar.DATE));
             classUsing.setCourseId(CommonConstant.CLASSROOM_USING_LEND_COURSEID);

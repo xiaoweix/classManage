@@ -17,4 +17,6 @@ public interface ClassroomInfoMapper {
     int updateByPrimaryKeySelective(ClassroomInfo record);
 
     int updateByPrimaryKey(ClassroomInfo record);
+
+    List<ClassroomInfo> getClassroomBySchoolID(@Param("schoolId") Integer schoolId,@Param("roomLayer") Integer roomLayer,@Param("roomCapacity") Integer roomCapacity);
 }
