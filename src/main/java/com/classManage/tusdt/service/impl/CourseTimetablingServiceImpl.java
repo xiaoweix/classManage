@@ -9,9 +9,7 @@ import com.classManage.tusdt.service.CourseTimetablingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Calendar;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Description:
@@ -42,6 +40,7 @@ public class CourseTimetablingServiceImpl implements CourseTimetablingService {
         ResponseData<String> responseData = new ResponseData<>();
         //设置教学计划是否删除
         courseTimetabling.setIsDelete(CommonConstant.DELETED_NO);
+        courseTimetabling.setResult(CommonConstant.CLASSROOM_APPLY_RESULT_WAIT);
         //数据库插入教学计划
         courseTimetablingMapper.insert(courseTimetabling);
         responseData.setOK("添加成功！");
@@ -58,6 +57,10 @@ public class CourseTimetablingServiceImpl implements CourseTimetablingService {
     public ResponseData<String> dealCoursePlan(Integer courseTimetablingId) {
         ResponseData<String> responseData = new ResponseData<>();
         CourseTimetabling courseTimetabling = courseTimetablingMapper.selectByPrimaryKey(courseTimetablingId);
+        if(courseTimetabling.getResult().equals(CommonConstant.CLASSROOM_APPLY_RESULT_NO) || courseTimetabling.getResult().equals(CommonConstant.CLASSROOM_APPLY_RESULT_YES)) {
+            responseData.setError("课程已经被处理无需再处理");
+            return responseData;
+        }
         CourseInfo courseInfo = courseInfoMapper.selectByPrimaryKey(courseTimetabling.getCourseId());
         // 排课默认是周一~周五 12节、34节、67节、89节。晚上的课和周末的课除了特殊要求之外，不安排
         // 排课一门课程不可能一周上完，所以一周安排3次课。
@@ -76,122 +79,157 @@ public class CourseTimetablingServiceImpl implements CourseTimetablingService {
         int courseStudentNum = getStudentNum(courseTimetabling);
         List<ClassroomInfo> classroomInfoList = classroomInfoMapper.getClassroomBySchoolID(courseTimetabling.getSchoolId(),courseTimetabling.getBuildingLayer(),courseStudentNum);
 
+        int cyclingCount = 0;
+
         //表示三天上課星期数 随机数且不相等
-        int []weekday = new int[4];
+        List<Integer> weekday = new ArrayList<>();
         int max=5;//星期五
         int min=1;//星期一
-        for (int i=0; i<100; i++) {
+        for (int i=0; i<3; i++) {
+            cyclingCount++;
+            if (cyclingCount>100) {
+                if (weekday.size()==0) {
+                    weekday.add(6);
+                }
+                if (weekday.size()==1) {
+                    weekday.add(6);
+                }
+                if (weekday.size()==2) {
+                    weekday.add(7);
+                }
+                break;
+            }
             Random random = new Random();
-            weekday[0] = random.nextInt(max)%(max-min+1) + min;
-            weekday[1] = random.nextInt(max)%(max-min+1) + min;
-            weekday[2] = random.nextInt(max)%(max-min+1) + min;
-            if (weekday[0] != weekday[1] && weekday[1] != weekday[2] && weekday[0] != weekday[2]) {
-                System.out.println(i);
-                System.out.println(weekday[0] + " " + weekday[1] + " " + weekday[2]);
+            int tempWeek =  random.nextInt(max)%(max-min+1) + min;
+            if (checkWeek(courseTimetabling.getUserId(),year,month,day,tempWeek)) {
+                i--;
+                continue;
+            }
+            weekday.add(tempWeek);
+            if (weekday.size() >= 3) {
+                break;
+            }
+
+        }
+        List<Integer> courseTimeList = new ArrayList<>();
+         max=4;//第四次课
+         min=1;//第一次课
+        for (int i=0; i<3; i++) {
+            Random random = new Random();
+            int tempCourseTime = random.nextInt(max)%(max-min+1) + min;
+            //检查老师的课表里面这节课被安排了没有
+            if(checkTeacherTiming(courseTimetabling.getUserId(),year,month,tempCourseTime,weekday.get(i))) {
+                i--;
+                continue;
+            }
+            courseTimeList.add(tempCourseTime);
+            if (courseTimeList.size() >= 3) {
                 break;
             }
         }
+
+        //表示随机三间教室 特别注意要判断教室选取合不合理，如果有教室被占用，那么不能将它排课
+        Map<Integer,ClassroomInfo>  classroomInfoMap= new HashMap<>();
+
+        //随机安排一个教室
+        max = classroomInfoList.size()-1;
+        Random random = new Random();
+        //count是用来判断是否随机到了一个教室
+        //一周三节课 分别对应三间教室
+        for (int j = 0; j < 3; j++) {
+            int roomIndex = random.nextInt(max)%(max-min+1) + min;
+            ClassroomInfo classroomInfo = classroomInfoList.get(roomIndex);
+            if (checkCourse(classroomInfo.getId(),year,month,weekday.get(j),courseTimeList.get(j))) {
+                j--;
+                continue;
+            }
+            classroomInfoMap.put(weekday.get(j),classroomInfo);
+            if(classroomInfoMap.size() >= 3) {
+                break;
+            }
+        }
+
+
         //插入课程 根据课时循环
         for (int i = 0; i < courseTimetabling.getCourseNum();) {
             for (int j = 0; j < 3; j++) {
                 //Integer courseId, Integer userId, Integer roomId, Integer year, Integer month, Integer day, Integer courseTime, String remark, Integer isDelete
                 int timeCount = 0;
-                Random random = new Random();
-                max = 4;
-                //随机安排到一个课程时间
-                int courseTime = random.nextInt(max)%(max-min+1) + min;
-
-                //随机安排一个教室
-                max = classroomInfoList.size()-1;
-                int roomIndex = random.nextInt(max)%(max-min+1) + min;
-                ClassroomInfo classroomInfo = classroomInfoList.get(roomIndex);
+                ClassroomInfo classroomInfo = classroomInfoMap.get(weekday.get(j));
                 String remark = String.format("课程 %s 固定使用",courseInfo.getCourseName());
-                if(courseTime == 1) {
-                    //如果第一节课或者第二节课被用了那就开始下一轮
-                    if (checkCourse(classroomInfo.getId(),year,month,day+weekday[j],1) ||
-                            checkCourse(classroomInfo.getId(),year,month,day+weekday[j],2)) {
-                        j--;
-                        continue;
-                    }
+                int newDay = day+weekday.get(j);
+                if((month == 1 || month == 3 ||month == 5 ||month == 7 ||month == 8 ||month == 10 ||month == 12) && day>31) {
+                    month += 1;
+                    day -= 31;
+                } else if ((month == 4 || month == 6 ||month == 9 ||month == 11 ) && day>30) {
+                    month += 1;
+                    day -= 30;
+                } else if (month == 2 && day > 28) {
+                    month += 1;
+                    day -= 28;
+                }
+                if(courseTimeList.get(j) == 1) {
                     ClassUsing classUsing = new ClassUsing(
                             courseTimetabling.getCourseId(),
                             courseTimetabling.getUserId(),
-                            classroomInfo.getId(),year,month,day+weekday[j],1,
+                            classroomInfo.getId(),year,month,newDay,weekday.get(j),1,
                             remark,CommonConstant.DELETED_NO
 
                     );
                     ClassUsing classUsing2 = new ClassUsing(
                             courseTimetabling.getCourseId(),
                             courseTimetabling.getUserId(),
-                            classroomInfo.getId(),year,month,day+weekday[j],2,
+                            classroomInfo.getId(),year,month,newDay,weekday.get(j),2,
                             remark,CommonConstant.DELETED_NO
 
                     );
                     classUsingMapper.insert(classUsing);
                     classUsingMapper.insert(classUsing2);
-                } else if (courseTime == 2) {
-                    //如果第一节课或者第二节课被用了那就开始下一轮
-                    if (checkCourse(classroomInfo.getId(),year,month,day+weekday[j],3) ||
-                            checkCourse(classroomInfo.getId(),year,month,day+weekday[j],4)) {
-                        i-=2;
-                        continue;
-                    }
+                } else if (courseTimeList.get(j) == 2) {
                     ClassUsing classUsing = new ClassUsing(
                             courseTimetabling.getCourseId(),
                             courseTimetabling.getUserId(),
-                            classroomInfo.getId(),year,month,day+weekday[j],3,
+                            classroomInfo.getId(),year,month,newDay,weekday.get(j),3,
                             remark,CommonConstant.DELETED_NO
 
                     );
                     ClassUsing classUsing2 = new ClassUsing(
                             courseTimetabling.getCourseId(),
                             courseTimetabling.getUserId(),
-                            classroomInfo.getId(),year,month,day+weekday[j],4,
+                            classroomInfo.getId(),year,month,newDay,weekday.get(j),4,
                             remark,CommonConstant.DELETED_NO
                     );
                     classUsingMapper.insert(classUsing);
                     classUsingMapper.insert(classUsing2);
-                } else if (courseTime == 3) {
-                    //如果第一节课或者第二节课被用了那就开始下一轮
-                    if (checkCourse(classroomInfo.getId(),year,month,day+weekday[j],6) ||
-                            checkCourse(classroomInfo.getId(),year,month,day+weekday[j],7)) {
-                        i-=2;
-                        continue;
-                    }
+                } else if (courseTimeList.get(j) == 3) {
                     ClassUsing classUsing = new ClassUsing(
                             courseTimetabling.getCourseId(),
                             courseTimetabling.getUserId(),
-                            classroomInfo.getId(),year,month,day+weekday[j],6,
+                            classroomInfo.getId(),year,month,newDay,weekday.get(j),6,
                             remark,CommonConstant.DELETED_NO
 
                     );
                     ClassUsing classUsing2 = new ClassUsing(
                             courseTimetabling.getCourseId(),
                             courseTimetabling.getUserId(),
-                            classroomInfo.getId(),year,month,day+weekday[j],7,
+                            classroomInfo.getId(),year,month,newDay,weekday.get(j),7,
                             remark,CommonConstant.DELETED_NO
 
                     );
                     classUsingMapper.insert(classUsing);
                     classUsingMapper.insert(classUsing2);
-                } else if (courseTime == 4) {
-                    //如果第一节课或者第二节课被用了那就开始下一轮
-                    if (checkCourse(classroomInfo.getId(),year,month,day+weekday[j],8) ||
-                            checkCourse(classroomInfo.getId(),year,month,day+weekday[j],9)) {
-                        i-=2;
-                        continue;
-                    }
+                } else if (courseTimeList.get(j) == 4) {
                     ClassUsing classUsing = new ClassUsing(
                             courseTimetabling.getCourseId(),
                             courseTimetabling.getUserId(),
-                            classroomInfo.getId(),year,month,day+weekday[j],8,
+                            classroomInfo.getId(),year,month,newDay,weekday.get(j),8,
                             remark,CommonConstant.DELETED_NO
 
                     );
                     ClassUsing classUsing2 = new ClassUsing(
                             courseTimetabling.getCourseId(),
                             courseTimetabling.getUserId(),
-                            classroomInfo.getId(),year,month,day+weekday[j],9,
+                            classroomInfo.getId(),year,month,newDay,weekday.get(j),9,
                             remark,CommonConstant.DELETED_NO
 
                     );
@@ -208,10 +246,10 @@ public class CourseTimetablingServiceImpl implements CourseTimetablingService {
                     break;
                 }
             }
-
             day+=7;
         }
-
+        courseTimetabling.setResult(CommonConstant.CLASSROOM_APPLY_RESULT_YES);
+        courseTimetablingMapper.updateByPrimaryKeySelective(courseTimetabling);
         responseData.setOK("处理成功");
         return responseData;
     }
@@ -220,7 +258,8 @@ public class CourseTimetablingServiceImpl implements CourseTimetablingService {
     public ResponseData<String> disagreeCoursePlan(Integer courseTimetablingId) {
         ResponseData<String> responseData = new ResponseData<>();
         CourseTimetabling courseTimetabling = courseTimetablingMapper.selectByPrimaryKey(courseTimetablingId);
-
+        courseTimetabling.setResult(CommonConstant.CLASSROOM_APPLY_RESULT_NO);
+        courseTimetablingMapper.updateByPrimaryKeySelective(courseTimetabling);
         responseData.setOK("处理成功");
         return responseData;
     }
@@ -233,9 +272,34 @@ public class CourseTimetablingServiceImpl implements CourseTimetablingService {
         return classInfo1.getClassNumber() + classInfo2.getClassNumber() + classInfo3.getClassNumber() + classInfo4.getClassNumber();
     }
     //判断教室是否被用 false表示没用 true表示用了
-    private boolean checkCourse(Integer classroomId, Integer year, Integer month, Integer day, Integer courseTime){
-        CourseTimetabling courseTimetabling = courseTimetablingMapper.checkCourseTime(classroomId,year,month,day,courseTime);
-        if (courseTimetabling == null) {
+    private boolean checkCourse(Integer classroomId, Integer year, Integer month, Integer courseTime,Integer week){
+        List<ClassUsing> classUsingList = classUsingMapper.checkCourseTime(classroomId,year,month,week,courseTime);
+        if(classUsingList == null || classUsingList.isEmpty()) {
+            classUsingList = classUsingMapper.checkCourseTime(classroomId,year,month+1,week,courseTime);
+            if(classUsingList != null && !classUsingList.isEmpty()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+    //判断老师是否在这节课已经安排了课程了 false表示没有用 true表示用了
+    private boolean checkTeacherTiming(Integer teacherId, Integer year, Integer month, Integer courseTime,Integer week){
+        List<ClassUsing> classUsing = classUsingMapper.checkTeacherTime(teacherId,year,month,week,courseTime);
+        if(classUsing == null || classUsing.isEmpty()) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    //检查周几是否被用慢 true被用满 false没有用满
+    private boolean checkWeek(Integer teacherId, Integer year, Integer month, Integer day,Integer week){
+        List<ClassUsing> classUsing = classUsingMapper.checkWeekTime(teacherId,year,month,day,week);
+        if (classUsing == null) {
+            return false;
+        }
+        if(classUsing.size()<8) {
             return false;
         } else {
             return true;

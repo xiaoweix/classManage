@@ -21,7 +21,7 @@ public class CommonConstant {
     public static final Integer DELETED_NO = 0;
 
     /**
-     * 用户状态 0:正常 1 正常 2未审核 Unaudited
+     * 用户状态 0:正常 1 锁定 2未审核 Unaudited
      */
     public static final Integer USER_STATUS_NORMAL = 0;
 

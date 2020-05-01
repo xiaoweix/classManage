@@ -15,11 +15,12 @@
     <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
     <result column="school_id" property="schoolId" jdbcType="INTEGER" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="result" property="result" jdbcType="INTEGER" />
     <result column="is_delete" property="isDelete" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, course_id, user_id, class_id1, class_id2, class_id3, class_id4, course_num, building_layer, 
-    start_time, end_time, school_id, remark, is_delete
+    start_time, end_time, school_id, remark, result, is_delete
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -36,12 +37,14 @@
       class_id1, class_id2, class_id3, 
       class_id4, course_num, building_layer, 
       start_time, end_time, school_id, 
-      remark, is_delete)
+      remark, result, is_delete
+      )
     values (#{id,jdbcType=INTEGER}, #{courseId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, 
       #{classId1,jdbcType=INTEGER}, #{classId2,jdbcType=INTEGER}, #{classId3,jdbcType=INTEGER}, 
       #{classId4,jdbcType=INTEGER}, #{courseNum,jdbcType=INTEGER}, #{buildingLayer,jdbcType=INTEGER}, 
       #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{schoolId,jdbcType=INTEGER}, 
-      #{remark,jdbcType=VARCHAR}, #{isDelete,jdbcType=INTEGER})
+      #{remark,jdbcType=VARCHAR}, #{result,jdbcType=INTEGER}, #{isDelete,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.classManage.tusdt.model.CourseTimetabling" >
     insert into course_timetabling
@@ -84,6 +87,9 @@
       </if>
       <if test="remark != null" >
         remark,
+      </if>
+      <if test="result != null" >
+        result,
       </if>
       <if test="isDelete != null" >
         is_delete,
@@ -129,6 +135,9 @@
       <if test="remark != null" >
         #{remark,jdbcType=VARCHAR},
       </if>
+      <if test="result != null" >
+        #{result,jdbcType=INTEGER},
+      </if>
       <if test="isDelete != null" >
         #{isDelete,jdbcType=INTEGER},
       </if>
@@ -173,6 +182,9 @@
       <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},
       </if>
+      <if test="result != null" >
+        result = #{result,jdbcType=INTEGER},
+      </if>
       <if test="isDelete != null" >
         is_delete = #{isDelete,jdbcType=INTEGER},
       </if>
@@ -193,11 +205,12 @@
       end_time = #{endTime,jdbcType=TIMESTAMP},
       school_id = #{schoolId,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
+      result = #{result,jdbcType=INTEGER},
       is_delete = #{isDelete,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="getCoursePlan" resultType="com.classManage.tusdt.model.BO.CoursePlanListBO">
-    select ct.id, ci.course_name courseName,ct.course_num courseNum,u.user_name userName, class_id1 classId1,class_id2 classId2,class_id3 classId3,class_id4 classId4,ct.remark
+    <select id="getCoursePlan" resultType="com.classManage.tusdt.model.BO.CoursePlanListBO">
+    select ct.id, ci.course_name courseName,ct.course_num courseNum,u.user_name userName, class_id1 classId1,class_id2 classId2,class_id3 classId3,class_id4 classId4,ct.result,ct.remark
     from course_timetabling ct, course_info ci, user u
     where ct.is_delete = 0
     and ct.course_id = ci.id

@@ -27,6 +27,16 @@ public class CoursePlanListBO {
 
     private String remark;
 
+    private Integer result;
+
+    public Integer getResult() {
+        return result;
+    }
+
+    public void setResult(Integer result) {
+        this.result = result;
+    }
+
     public String getRemark() {
         return remark;
     }

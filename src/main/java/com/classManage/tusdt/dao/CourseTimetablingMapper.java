@@ -20,6 +20,4 @@ public interface CourseTimetablingMapper {
     int updateByPrimaryKey(CourseTimetabling record);
 
     List<CoursePlanListBO> getCoursePlan(Integer schoolId, String courseName);
-
-    CourseTimetabling checkCourseTime(@Param("classroomId") Integer classroomId,@Param("year") Integer year,@Param("month") Integer month,@Param("day") Integer day,@Param("courseTime") Integer courseTime);
 }

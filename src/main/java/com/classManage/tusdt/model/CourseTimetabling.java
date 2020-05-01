@@ -29,6 +29,8 @@ public class CourseTimetabling {
 
     private String remark;
 
+    private Integer result;
+
     private Integer isDelete;
 
     public Integer getId() {
@@ -133,6 +135,14 @@ public class CourseTimetabling {
 
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
+    }
+
+    public Integer getResult() {
+        return result;
+    }
+
+    public void setResult(Integer result) {
+        this.result = result;
     }
 
     public Integer getIsDelete() {

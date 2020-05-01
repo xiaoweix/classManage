@@ -15,6 +15,8 @@ public class ClassUsing {
 
     private Integer day;
 
+    private Integer week;
+
     private Integer courseTime;
 
     private String remark;
@@ -24,13 +26,14 @@ public class ClassUsing {
     public ClassUsing() {
     }
 
-    public ClassUsing(Integer courseId, Integer userId, Integer roomId, Integer year, Integer month, Integer day, Integer courseTime, String remark, Integer isDelete) {
+    public ClassUsing(Integer courseId, Integer userId, Integer roomId, Integer year, Integer month, Integer day, Integer week, Integer courseTime, String remark, Integer isDelete) {
         this.courseId = courseId;
         this.userId = userId;
         this.roomId = roomId;
         this.year = year;
         this.month = month;
         this.day = day;
+        this.week = week;
         this.courseTime = courseTime;
         this.remark = remark;
         this.isDelete = isDelete;
@@ -90,6 +93,14 @@ public class ClassUsing {
 
     public void setDay(Integer day) {
         this.day = day;
+    }
+
+    public Integer getWeek() {
+        return week;
+    }
+
+    public void setWeek(Integer week) {
+        this.week = week;
     }
 
     public Integer getCourseTime() {

@@ -9,15 +9,16 @@
     <result column="year" property="year" jdbcType="INTEGER" />
     <result column="month" property="month" jdbcType="INTEGER" />
     <result column="day" property="day" jdbcType="INTEGER" />
+    <result column="week" property="week" jdbcType="INTEGER" />
     <result column="course_time" property="courseTime" jdbcType="INTEGER" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="is_delete" property="isDelete" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, course_id, user_id, room_id, year, month, day, course_time, remark, is_delete
+    id, course_id, user_id, room_id, year, month, day, week, course_time, remark, is_delete
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from class_using
     where id = #{id,jdbcType=INTEGER}
@@ -27,14 +28,14 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.classManage.tusdt.model.ClassUsing" >
-    insert into class_using (id, course_id, user_id, 
-      room_id, year, month, 
-      day, course_time, remark, 
-      is_delete)
-    values (#{id,jdbcType=INTEGER}, #{courseId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, 
-      #{roomId,jdbcType=INTEGER}, #{year,jdbcType=INTEGER}, #{month,jdbcType=INTEGER}, 
-      #{day,jdbcType=INTEGER}, #{courseTime,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
-      #{isDelete,jdbcType=INTEGER})
+    insert into class_using (id, course_id, user_id,
+    room_id, year, month,
+    day, week, course_time,
+    remark, is_delete)
+    values (#{id,jdbcType=INTEGER}, #{courseId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER},
+    #{roomId,jdbcType=INTEGER}, #{year,jdbcType=INTEGER}, #{month,jdbcType=INTEGER},
+    #{day,jdbcType=INTEGER}, #{week,jdbcType=INTEGER}, #{courseTime,jdbcType=INTEGER},
+    #{remark,jdbcType=VARCHAR}, #{isDelete,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.classManage.tusdt.model.ClassUsing" >
     insert into class_using
@@ -59,6 +60,9 @@
       </if>
       <if test="day != null" >
         day,
+      </if>
+      <if test="week != null" >
+        week,
       </if>
       <if test="courseTime != null" >
         course_time,
@@ -92,6 +96,9 @@
       <if test="day != null" >
         #{day,jdbcType=INTEGER},
       </if>
+      <if test="week != null" >
+        #{week,jdbcType=INTEGER},
+      </if>
       <if test="courseTime != null" >
         #{courseTime,jdbcType=INTEGER},
       </if>
@@ -124,6 +131,9 @@
       <if test="day != null" >
         day = #{day,jdbcType=INTEGER},
       </if>
+      <if test="week != null" >
+        week = #{week,jdbcType=INTEGER},
+      </if>
       <if test="courseTime != null" >
         course_time = #{courseTime,jdbcType=INTEGER},
       </if>
@@ -139,14 +149,15 @@
   <update id="updateByPrimaryKey" parameterType="com.classManage.tusdt.model.ClassUsing" >
     update class_using
     set course_id = #{courseId,jdbcType=INTEGER},
-      user_id = #{userId,jdbcType=INTEGER},
-      room_id = #{roomId,jdbcType=INTEGER},
-      year = #{year,jdbcType=INTEGER},
-      month = #{month,jdbcType=INTEGER},
-      day = #{day,jdbcType=INTEGER},
-      course_time = #{courseTime,jdbcType=INTEGER},
-      remark = #{remark,jdbcType=VARCHAR},
-      is_delete = #{isDelete,jdbcType=INTEGER}
+    user_id = #{userId,jdbcType=INTEGER},
+    room_id = #{roomId,jdbcType=INTEGER},
+    year = #{year,jdbcType=INTEGER},
+    month = #{month,jdbcType=INTEGER},
+    day = #{day,jdbcType=INTEGER},
+    week = #{week,jdbcType=INTEGER},
+    course_time = #{courseTime,jdbcType=INTEGER},
+    remark = #{remark,jdbcType=VARCHAR},
+    is_delete = #{isDelete,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByTime" resultType="com.classManage.tusdt.model.BO.ClassroomNameBO">
@@ -165,5 +176,37 @@
       and building_id = #{buildingId,jdbcType=INTEGER}
     </if>
     and school_id = #{schoolId,jdbcType=INTEGER}
+  </select>
+  <select id="checkCourseTime" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from class_using
+    where room_id = #{classroomId,jdbcType=INTEGER}
+    and year = #{year,jdbcType=INTEGER}
+    and month = #{month,jdbcType=INTEGER}
+    and week = #{week,jdbcType=INTEGER}
+    and course_time = #{courseTime,jdbcType=INTEGER}
+  </select>
+
+  <select id="checkTeacherTime" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from class_using
+    where user_id = #{teacherId,jdbcType=INTEGER}
+    and year = #{year,jdbcType=INTEGER}
+    and month = #{month,jdbcType=INTEGER}
+    and week = #{week,jdbcType=INTEGER}
+    and course_time = #{courseTime,jdbcType=INTEGER}
+  </select>
+
+  <select id="checkWeekTime" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from class_using
+    where user_id = #{teacherId,jdbcType=INTEGER}
+    and year = #{year,jdbcType=INTEGER}
+    and month = #{month,jdbcType=INTEGER}
+    and day = #{day,jdbcType=INTEGER}
+    and week = #{week,jdbcType=INTEGER}
   </select>
 </mapper>

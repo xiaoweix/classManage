@@ -117,8 +117,8 @@ public class UserInfoController {
         return responseData;
     }
 
-    @ApiOperation(value = "删除用户", notes = "删除用户")
-    @ApiResponses({@ApiResponse(code = Response.OK, message = "删除成功"),})
+    @ApiOperation(value = "同意用户的申请", notes = "同意用户的申请")
+    @ApiResponses({@ApiResponse(code = Response.OK, message = "操作成功"),})
     @ApiImplicitParams(
             value = {
                     @ApiImplicitParam(paramType = "header", name = "token", dataType = "String", required = true, value = "token"),
@@ -130,7 +130,7 @@ public class UserInfoController {
                                            @RequestParam(value = "userId",required = true) Integer userId) {
 
         ResponseData<String> responseData = new ResponseData<>();
-        responseData = userInfoService.removeUser(userId);
+        responseData = userInfoService.agreeUserApply(userId);
         return responseData;
     }
 
