@@ -2,6 +2,7 @@ package com.classManage.tusdt.controller;
 
 import com.classManage.tusdt.base.common.ResponseData;
 import com.classManage.tusdt.base.constants.Response;
+import com.classManage.tusdt.model.BO.ClassSchedule;
 import com.classManage.tusdt.model.BO.CoursePlanListBO;
 import com.classManage.tusdt.model.CourseTimetabling;
 import com.classManage.tusdt.service.CourseTimetablingService;
@@ -97,4 +98,24 @@ public class CourseTimetablingController {
         return courseTimetablingService.disagreeCoursePlan(courseTimetablingId);
     }
 
+    @ApiOperation(value = "获取课程表", notes = "")
+    @ApiResponses({@ApiResponse(code = Response.OK, message = "查询成功"),})
+    @ApiImplicitParams(
+            value = {
+                    @ApiImplicitParam(paramType = "header", name = "token", dataType = "String", required = true, value = "token"),
+            }
+    )
+    @RequestMapping(value = "/getSchedule", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseData<List<ClassSchedule>> getSchedule(HttpServletRequest request) {
+        ResponseData<List<ClassSchedule>> responseData = new ResponseData<>();
+        Integer userId = (Integer) request.getAttribute("userId");
+        List<ClassSchedule> classScheduleList = courseTimetablingService.getSchedule(userId);
+        if(classScheduleList == null) {
+            responseData.setError("获取失败");
+            return responseData;
+        }
+        responseData.setOK("获取成功",classScheduleList);
+        return responseData;
+    }
 }

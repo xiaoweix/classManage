@@ -4,6 +4,8 @@ import com.classManage.tusdt.base.common.ResponseData;
 import com.classManage.tusdt.constants.CommonConstant;
 import com.classManage.tusdt.dao.*;
 import com.classManage.tusdt.model.*;
+import com.classManage.tusdt.model.BO.ClassSchedule;
+import com.classManage.tusdt.model.BO.ClassUsingScheduleBO;
 import com.classManage.tusdt.model.BO.CoursePlanListBO;
 import com.classManage.tusdt.service.CourseTimetablingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,62 +74,39 @@ public class CourseTimetablingServiceImpl implements CourseTimetablingService {
         int distance = 7 - day0; //距离下周日还有distance天
         int year = timeCal.get(Calendar.YEAR);
         int month = timeCal.get(Calendar.MONTH)+1;
-        int day = timeCal.get(Calendar.DATE)+distance; //算出距离最近的下一个星期一
+        int day = timeCal.get(Calendar.DATE)+distance+1; //算出距离最近的下一个星期一
         //将下周一的时间 转成日期字符串 yyyy-MM-dd HH:mm:ss
         String dataString = String.format("%s-%s-%s %s:%s:%s",year,month,day,"00","00","00");
         //获取整个学校的教室 根据课程的人数、学校的楼层查找
+        System.out.println(dataString);
         int courseStudentNum = getStudentNum(courseTimetabling);
         List<ClassroomInfo> classroomInfoList = classroomInfoMapper.getClassroomBySchoolID(courseTimetabling.getSchoolId(),courseTimetabling.getBuildingLayer(),courseStudentNum);
 
         int cyclingCount = 0;
 
+        List<Integer> weekday = dealWeekday(courseTimetabling,year,month,day);
         //表示三天上課星期数 随机数且不相等
-        List<Integer> weekday = new ArrayList<>();
-        int max=5;//星期五
-        int min=1;//星期一
-        for (int i=0; i<3; i++) {
-            cyclingCount++;
-            if (cyclingCount>100) {
-                if (weekday.size()==0) {
-                    weekday.add(6);
-                }
-                if (weekday.size()==1) {
-                    weekday.add(6);
-                }
-                if (weekday.size()==2) {
-                    weekday.add(7);
-                }
-                break;
-            }
-            Random random = new Random();
-            int tempWeek =  random.nextInt(max)%(max-min+1) + min;
-            if (checkWeek(courseTimetabling.getUserId(),year,month,day,tempWeek)) {
-                i--;
-                continue;
-            }
-            weekday.add(tempWeek);
-            if (weekday.size() >= 3) {
-                break;
-            }
-
-        }
         List<Integer> courseTimeList = new ArrayList<>();
-         max=4;//第四次课
-         min=1;//第一次课
-        for (int i=0; i<3; i++) {
+        int max=4;//第四次课
+        int min=1;//第一次课
+        while (courseTimeList.size() < 3) {
             Random random = new Random();
             int tempCourseTime = random.nextInt(max)%(max-min+1) + min;
+            tempCourseTime *= 2;
             //检查老师的课表里面这节课被安排了没有
-            if(checkTeacherTiming(courseTimetabling.getUserId(),year,month,tempCourseTime,weekday.get(i))) {
-                i--;
+            int i = courseTimeList.size();
+            cyclingCount ++;
+            if (cyclingCount>100) {
+                Collections.shuffle(weekday);
+                cyclingCount = 0;
+                courseTimeList.clear();
+            }
+            if(checkTeacherTiming(courseTimetabling.getUserId(),year,month,weekday.get(i),tempCourseTime)) {
                 continue;
             }
+            tempCourseTime/=2;
             courseTimeList.add(tempCourseTime);
-            if (courseTimeList.size() >= 3) {
-                break;
-            }
         }
-
         //表示随机三间教室 特别注意要判断教室选取合不合理，如果有教室被占用，那么不能将它排课
         Map<Integer,ClassroomInfo>  classroomInfoMap= new HashMap<>();
 
@@ -158,14 +137,17 @@ public class CourseTimetablingServiceImpl implements CourseTimetablingService {
                 ClassroomInfo classroomInfo = classroomInfoMap.get(weekday.get(j));
                 String remark = String.format("课程 %s 固定使用",courseInfo.getCourseName());
                 int newDay = day+weekday.get(j);
-                if((month == 1 || month == 3 ||month == 5 ||month == 7 ||month == 8 ||month == 10 ||month == 12) && day>31) {
+                if((month == 1 || month == 3 ||month == 5 ||month == 7 ||month == 8 ||month == 10 ||month == 12) && newDay>31) {
                     month += 1;
+                    newDay -= 31;
                     day -= 31;
-                } else if ((month == 4 || month == 6 ||month == 9 ||month == 11 ) && day>30) {
+                } else if ((month == 4 || month == 6 ||month == 9 ||month == 11 ) && newDay>30) {
                     month += 1;
+                    newDay -= 30;
                     day -= 30;
-                } else if (month == 2 && day > 28) {
+                } else if (month == 2 && newDay > 28) {
                     month += 1;
+                    newDay -= 28;
                     day -= 28;
                 }
                 if(courseTimeList.get(j) == 1) {
@@ -264,14 +246,54 @@ public class CourseTimetablingServiceImpl implements CourseTimetablingService {
         return responseData;
     }
 
+    @Override
+    public List<ClassSchedule> getSchedule(Integer userID) {
+        Calendar timeCal = Calendar.getInstance();
+        //课程开始时间
+        timeCal.setTime(new Date());
+        int year = timeCal.get(Calendar.YEAR);
+        int month = timeCal.get(Calendar.MONTH)+1;
+        String tempInfo;
+        List<ClassSchedule> classScheduleList = new ArrayList<>();
+        for (int i = 1; i < 6; i++) {
+            ClassSchedule classSchedule = new ClassSchedule();
+            classSchedule.setWeek(i);
+            List<String> courseInfo = new ArrayList<>();
+            for (int j = 1; j < 10; j++) {
+                if (j == 5) {
+                    courseInfo.add(" ");
+                    continue;
+                }
+                List<ClassUsingScheduleBO> classUsingScheduleBOList = classUsingMapper.getSchedule(userID,year,month,i,j);
+                if(classUsingScheduleBOList == null || classUsingScheduleBOList.isEmpty()) {
+                    classUsingScheduleBOList = classUsingMapper.getSchedule(userID,year,month+1,i,j);
+                    if(classUsingScheduleBOList == null || classUsingScheduleBOList.isEmpty()) {
+                        courseInfo.add(" ");
+                        continue;
+                    }
+                }
+                ClassUsingScheduleBO tempSchedule = classUsingScheduleBOList.get(0);
+                tempInfo = String.format("%s-%s",tempSchedule.getCourseName(),tempSchedule.getRoomName());
+                courseInfo.add(tempInfo);
+            }
+            classSchedule.setCourseInfo(courseInfo);
+            classScheduleList.add(classSchedule);
+        }
+
+        return classScheduleList;
+    }
+
     private Integer getStudentNum(CourseTimetabling courseTimetabling) {
+        if (courseTimetabling.getClassId1() != null) {
+
+        }
         ClassInfo classInfo1 = classInfoMapper.selectByPrimaryKey(courseTimetabling.getClassId1());
         ClassInfo classInfo2 = classInfoMapper.selectByPrimaryKey(courseTimetabling.getClassId2());
         ClassInfo classInfo3 = classInfoMapper.selectByPrimaryKey(courseTimetabling.getClassId3());
         ClassInfo classInfo4 = classInfoMapper.selectByPrimaryKey(courseTimetabling.getClassId4());
         return classInfo1.getClassNumber() + classInfo2.getClassNumber() + classInfo3.getClassNumber() + classInfo4.getClassNumber();
     }
-    //判断教室是否被用 false表示没用 true表示用了
+    //判断教室是否被用 false表示没用 true表示用了㏂
     private boolean checkCourse(Integer classroomId, Integer year, Integer month, Integer courseTime,Integer week){
         List<ClassUsing> classUsingList = classUsingMapper.checkCourseTime(classroomId,year,month,week,courseTime);
         if(classUsingList == null || classUsingList.isEmpty()) {
@@ -285,10 +307,15 @@ public class CourseTimetablingServiceImpl implements CourseTimetablingService {
         return true;
     }
     //判断老师是否在这节课已经安排了课程了 false表示没有用 true表示用了
-    private boolean checkTeacherTiming(Integer teacherId, Integer year, Integer month, Integer courseTime,Integer week){
+    private boolean checkTeacherTiming(Integer teacherId, Integer year, Integer month,Integer week, Integer courseTime){
         List<ClassUsing> classUsing = classUsingMapper.checkTeacherTime(teacherId,year,month,week,courseTime);
         if(classUsing == null || classUsing.isEmpty()) {
-            return false;
+            classUsing = classUsingMapper.checkTeacherTime(teacherId,year,month+1,week,courseTime);
+            if(classUsing == null || classUsing.isEmpty()) {
+                return false;
+            } else {
+                return true;
+            }
         } else {
             return true;
         }
@@ -304,5 +331,50 @@ public class CourseTimetablingServiceImpl implements CourseTimetablingService {
         } else {
             return true;
         }
+    }
+
+    public static void main(String[] args) {
+        int min,max;
+        max=4;//第四次课
+        min=1;//第一次课
+        for (int i=0; i<3; i++) {
+            Random random = new Random();
+            int tempCourseTime = random.nextInt(max)%(max-min+1) + min;
+            System.out.println(tempCourseTime);
+        }
+
+    }
+    private List<Integer> dealWeekday(CourseTimetabling courseTimetabling,Integer year, Integer month, Integer day){
+        int max=5;//星期五
+        int min=1;//星期一
+        int cyclingCount = 0;
+        Set<Integer> tempSet = new HashSet<>();
+        for (int i=0; i<100; i++) {
+            cyclingCount++;
+            if (cyclingCount>100) {
+                if (tempSet.size()==0) {
+                    tempSet.add(6);
+                }
+                if (tempSet.size()==1) {
+                    tempSet.add(6);
+                }
+                if (tempSet.size()==2) {
+                    tempSet.add(7);
+                }
+                break;
+            }
+            Random random = new Random();
+            int tempWeek =  random.nextInt(max)%(max-min+1) + min;
+            if (checkWeek(courseTimetabling.getUserId(),year,month,day,tempWeek)) {
+                i--;
+                continue;
+            }
+            tempSet.add(tempWeek);
+            if (tempSet.size() >= 3) {
+                break;
+            }
+        }
+        List<Integer> result =  new ArrayList<>(tempSet);
+        return result;
     }
 }

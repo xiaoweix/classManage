@@ -1,5 +1,6 @@
 package com.classManage.tusdt.dao;
 
+import com.classManage.tusdt.model.BO.ClassUsingScheduleBO;
 import com.classManage.tusdt.model.BO.ClassroomNameBO;
 import com.classManage.tusdt.model.ClassUsing;
 import com.classManage.tusdt.model.CourseTimetabling;
@@ -28,4 +29,5 @@ public interface ClassUsingMapper {
 
     List<ClassUsing> checkWeekTime(@Param("teacherId") Integer teacherId, @Param("year") Integer year, @Param("month") Integer month, @Param("day") Integer day, @Param("week") Integer week);
 
+    List<ClassUsingScheduleBO> getSchedule(@Param("teacherId") Integer teacherId, @Param("year") Integer year, @Param("month") Integer month, @Param("week") Integer week, @Param("courseTime") Integer courseTime);
 }

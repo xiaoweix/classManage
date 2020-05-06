@@ -125,9 +125,9 @@
       is_delete = #{isDelete,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="getClassroomBySchoolID" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="getClassroomBySchoolID" resultType="com.classManage.tusdt.model.ClassroomInfo" >
     select
-    <include refid="Base_Column_List" />
+    id, room_name roomName, address, room_layer roomLayer, room_capacity roomCapacity, building_id buildingId, school_id schoolId, is_delete isDelete
     from classroom_info
     where is_delete = 0
     and school_id = #{schoolId,jdbcType=INTEGER}

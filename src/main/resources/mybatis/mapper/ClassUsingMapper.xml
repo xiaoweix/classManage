@@ -209,4 +209,16 @@
     and day = #{day,jdbcType=INTEGER}
     and week = #{week,jdbcType=INTEGER}
   </select>
+  <select id="getSchedule" resultType="com.classManage.tusdt.model.BO.ClassUsingScheduleBO">
+    select
+    ci.course_name courseName,cri.room_name roomName
+    from class_using cu, course_info ci, classroom_info cri
+    where cu.course_id = ci.id
+    and cu.room_id = cri.id
+    and cu.user_id = #{teacherId,jdbcType=INTEGER}
+    and year = #{year,jdbcType=INTEGER}
+    and month = #{month,jdbcType=INTEGER}
+    and week = #{week,jdbcType=INTEGER}
+    and course_time = #{courseTime,jdbcType=INTEGER}
+  </select>
 </mapper>

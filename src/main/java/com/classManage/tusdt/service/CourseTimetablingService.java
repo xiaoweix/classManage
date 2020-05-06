@@ -1,6 +1,7 @@
 package com.classManage.tusdt.service;
 
 import com.classManage.tusdt.base.common.ResponseData;
+import com.classManage.tusdt.model.BO.ClassSchedule;
 import com.classManage.tusdt.model.BO.CoursePlanListBO;
 import com.classManage.tusdt.model.CourseTimetabling;
 
@@ -21,4 +22,6 @@ public interface CourseTimetablingService {
     ResponseData<String> dealCoursePlan(Integer courseTimetablingId);
 
     ResponseData<String> disagreeCoursePlan(Integer courseTimetablingId);
+
+    List<ClassSchedule> getSchedule(Integer userID);
 }
