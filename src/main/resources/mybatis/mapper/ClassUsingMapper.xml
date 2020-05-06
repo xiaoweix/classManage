@@ -220,5 +220,6 @@
     and month = #{month,jdbcType=INTEGER}
     and week = #{week,jdbcType=INTEGER}
     and course_time = #{courseTime,jdbcType=INTEGER}
+    and remark != '0'
   </select>
 </mapper>
