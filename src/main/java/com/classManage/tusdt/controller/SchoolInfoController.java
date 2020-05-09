@@ -2,6 +2,7 @@ package com.classManage.tusdt.controller;
 
 import com.classManage.tusdt.base.common.ResponseData;
 import com.classManage.tusdt.base.constants.Response;
+import com.classManage.tusdt.constants.CommonConstant;
 import com.classManage.tusdt.model.BO.ClassroomNameBO;
 import com.classManage.tusdt.model.BO.SchoolCatalogBO;
 import com.classManage.tusdt.model.BO.SchoolInfoListBO;
@@ -40,10 +41,15 @@ public class SchoolInfoController {
     )
     @RequestMapping(value = "/addSchool", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<String> addSchool(@RequestBody SchoolInfo schoolInfo) {
+    public ResponseData<String> addSchool(HttpServletRequest request, @RequestBody SchoolInfo schoolInfo) {
 
-        ResponseData<String> responseData;
-        responseData = schoolInfoService.addSchool(schoolInfo);
+        ResponseData<String> responseData = new ResponseData<>();
+        Integer level = (Integer) request.getAttribute("level");
+        if (CommonConstant.USER_LEVEL_STU.equals(level)) {
+            responseData = schoolInfoService.addSchool(schoolInfo);
+        } else {
+            responseData.setError("权限不足，仅系统管理员可删除课程信息");
+        }
         return responseData;
     }
 
@@ -59,7 +65,13 @@ public class SchoolInfoController {
     public ResponseData<String> removeSchool(HttpServletRequest request,
                                                 @RequestParam(value = "schoolID",required = true) Integer schoolID) {
 
-        ResponseData<String> responseData = schoolInfoService.removeSchool(schoolID);
+        ResponseData<String> responseData = new ResponseData<>();
+        Integer level = (Integer) request.getAttribute("level");
+        if (CommonConstant.USER_LEVEL_STU.equals(level)) {
+            responseData = schoolInfoService.removeSchool(schoolID);
+        } else {
+            responseData.setError("权限不足，仅系统管理员可删除高校信息");
+        }
         return responseData;
     }
 
@@ -72,10 +84,15 @@ public class SchoolInfoController {
     )
     @RequestMapping(value = "/modifySchoolInfo", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<String> modifySchoolInfo(@RequestBody SchoolInfo schoolInfo) {
+    public ResponseData<String> modifySchoolInfo(HttpServletRequest request, @RequestBody SchoolInfo schoolInfo) {
 
-        ResponseData<String> responseData;
-        responseData = schoolInfoService.modifySchool(schoolInfo);
+        ResponseData<String> responseData = new ResponseData<>();
+        Integer level = (Integer) request.getAttribute("level");
+        if (CommonConstant.USER_LEVEL_STU.equals(level)) {
+            responseData = schoolInfoService.modifySchool(schoolInfo);
+        } else {
+            responseData.setError("权限不足，仅系统管理员可修改高校信息");
+        }
         return responseData;
     }
 

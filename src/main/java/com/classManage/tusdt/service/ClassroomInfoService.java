@@ -23,7 +23,7 @@ public interface ClassroomInfoService {
 
     ResponseData<String> removeClassRoom(Integer classId);
 
-    List<ClassroomNameBO> getAllClassroomName();
+    List<ClassroomInfo> getAllClassroomName(Integer schoolId);
 
 
 

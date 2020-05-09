@@ -2,6 +2,7 @@ package com.classManage.tusdt.controller;
 
 import com.classManage.tusdt.base.common.ResponseData;
 import com.classManage.tusdt.base.constants.Response;
+import com.classManage.tusdt.constants.CommonConstant;
 import com.classManage.tusdt.model.BO.ClassBaseInfoListBO;
 import com.classManage.tusdt.model.BO.SchoolCatalogBO;
 import com.classManage.tusdt.model.BO.SchoolInfoListBO;
@@ -38,10 +39,17 @@ public class ClassInfoController {
     )
     @RequestMapping(value = "/addClass", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<String> addSchool(@RequestBody ClassInfo classInfo) {
+    public ResponseData<String> addSchool(HttpServletRequest request,@RequestBody ClassInfo classInfo) {
 
-        ResponseData<String> responseData;
-        responseData = classInfoService.addClass(classInfo);
+        ResponseData<String> responseData = new ResponseData<>();
+        Integer schoolId = (Integer) request.getAttribute("schoolId");
+        classInfo.setSchoolId(schoolId);
+        Integer level = (Integer) request.getAttribute("level");
+        if (CommonConstant.USER_LEVEL_UNI_ADMIN.equals(level)) {
+            responseData = classInfoService.addClass(classInfo);
+        } else {
+            responseData.setError("权限不足，仅高校管理员可添加班级信息");
+        }
         return responseData;
     }
 
@@ -57,7 +65,13 @@ public class ClassInfoController {
     public ResponseData<String> removeClass(HttpServletRequest request,
                                              @RequestParam(value = "classId",required = true) Integer classId) {
 
-        ResponseData<String> responseData = classInfoService.removeClass(classId);
+        ResponseData<String> responseData = new ResponseData<>();
+        Integer level = (Integer) request.getAttribute("level");
+        if (CommonConstant.USER_LEVEL_UNI_ADMIN.equals(level)) {
+            responseData = classInfoService.removeClass(classId);
+        } else {
+            responseData.setError("权限不足，仅高校管理员可删除班级信息");
+        }
         return responseData;
     }
 
@@ -70,10 +84,15 @@ public class ClassInfoController {
     )
     @RequestMapping(value = "/modifyClassInfo", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<String> modifyClassInfo(@RequestBody ClassInfo classInfo) {
+    public ResponseData<String> modifyClassInfo(HttpServletRequest request,@RequestBody ClassInfo classInfo) {
 
-        ResponseData<String> responseData;
-        responseData = classInfoService.modifyClass(classInfo);
+        ResponseData<String> responseData = new ResponseData<>();
+        Integer level = (Integer) request.getAttribute("level");
+        if (CommonConstant.USER_LEVEL_UNI_ADMIN.equals(level)) {
+            responseData = classInfoService.modifyClass(classInfo);
+        } else {
+            responseData.setError("权限不足，仅高校管理员可删除班级信息");
+        }
         return responseData;
     }
 

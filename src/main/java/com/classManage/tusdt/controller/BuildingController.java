@@ -2,6 +2,7 @@ package com.classManage.tusdt.controller;
 
 import com.classManage.tusdt.base.common.ResponseData;
 import com.classManage.tusdt.base.constants.Response;
+import com.classManage.tusdt.constants.CommonConstant;
 import com.classManage.tusdt.model.BO.BuildingBaseInfoBO;
 import com.classManage.tusdt.model.BO.ClassBaseInfoListBO;
 import com.classManage.tusdt.model.BuildingInfo;
@@ -38,10 +39,17 @@ public class BuildingController {
     )
     @RequestMapping(value = "/addBuilding", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<String> addBuilding(@RequestBody BuildingInfo buildingInfo) {
+    public ResponseData<String> addBuilding(HttpServletRequest request,@RequestBody BuildingInfo buildingInfo) {
 
-        ResponseData<String> responseData;
-        responseData = buildingService.addBuilding(buildingInfo);
+        ResponseData<String> responseData = new ResponseData<>();
+        Integer schoolId = (Integer) request.getAttribute("schoolId");
+        buildingInfo.setSchoolId(schoolId);
+        Integer level = (Integer) request.getAttribute("level");
+        if (CommonConstant.USER_LEVEL_UNI_ADMIN.equals(level)) {
+            responseData = buildingService.addBuilding(buildingInfo);
+        } else {
+            responseData.setError("权限不足，仅高校管理员可添加教学楼");
+        }
         return responseData;
     }
 
@@ -57,7 +65,13 @@ public class BuildingController {
     public ResponseData<String> removeBuilding(HttpServletRequest request,
                                             @RequestParam(value = "buildingId",required = true) Integer buildingId) {
 
-        ResponseData<String> responseData = buildingService.removeBuilding(buildingId);
+        ResponseData<String> responseData = new ResponseData<>();
+        Integer level = (Integer) request.getAttribute("level");
+        if (CommonConstant.USER_LEVEL_UNI_ADMIN.equals(level)) {
+            responseData = buildingService.removeBuilding(buildingId);;
+        } else {
+            responseData.setError("权限不足，仅高校管理员可删除教学楼");
+        }
         return responseData;
     }
 
@@ -70,10 +84,15 @@ public class BuildingController {
     )
     @RequestMapping(value = "/modifyBuilding", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<String> modifyBuilding(@RequestBody BuildingInfo buildingInfo) {
+    public ResponseData<String> modifyBuilding(HttpServletRequest request, @RequestBody BuildingInfo buildingInfo) {
 
-        ResponseData<String> responseData;
-        responseData = buildingService.modifyBuilding(buildingInfo);
+        ResponseData<String> responseData = new ResponseData<>();
+        Integer level = (Integer) request.getAttribute("level");
+        if (CommonConstant.USER_LEVEL_UNI_ADMIN.equals(level)) {
+            responseData = buildingService.modifyBuilding(buildingInfo);
+        } else {
+            responseData.setError("权限不足，仅高校管理员可修改教学楼信息");
+        }
         return responseData;
     }
 

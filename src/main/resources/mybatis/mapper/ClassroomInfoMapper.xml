@@ -136,4 +136,11 @@
       and room_layer = #{roomLayer,jdbcType=INTEGER}
     </if>
   </select>
+  <select id="getBySchoolID" resultType="com.classManage.tusdt.model.ClassroomInfo">
+    select
+    id, room_name roomName, address, room_layer roomLayer, room_capacity roomCapacity, building_id buildingId, school_id schoolId, is_delete isDelete
+    from classroom_info
+    where is_delete = 0
+    and school_id = #{schoolId,jdbcType=INTEGER}
+  </select>
 </mapper>

@@ -2,6 +2,7 @@ package com.classManage.tusdt.controller;
 
 import com.classManage.tusdt.base.common.ResponseData;
 import com.classManage.tusdt.base.constants.Response;
+import com.classManage.tusdt.constants.CommonConstant;
 import com.classManage.tusdt.model.BO.CourseBaseInfoBO;
 import com.classManage.tusdt.model.CourseInfo;
 import com.classManage.tusdt.service.CourseInfoService;
@@ -35,10 +36,15 @@ public class CourseInfoController {
     )
     @RequestMapping(value = "/addCourse", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<String> addCourse(@RequestBody CourseInfo courseInfo) {
+    public ResponseData<String> addCourse(HttpServletRequest request, @RequestBody CourseInfo courseInfo) {
 
-        ResponseData<String> responseData;
-        responseData = courseInfoService.addCourse(courseInfo);
+        ResponseData<String> responseData = new ResponseData<>();
+        Integer level = (Integer) request.getAttribute("level");
+        if (CommonConstant.USER_LEVEL_UNI_ADMIN.equals(level)) {
+            responseData = courseInfoService.addCourse(courseInfo);
+        } else {
+            responseData.setError("权限不足，仅高校管理员可添加课程信息");
+        }
         return responseData;
     }
 
@@ -54,7 +60,13 @@ public class CourseInfoController {
     public ResponseData<String> removeCourse(HttpServletRequest request,
                                                @RequestParam(value = "courseId",required = true) Integer courseId) {
 
-        ResponseData<String> responseData = courseInfoService.removeCourse(courseId);
+        ResponseData<String> responseData = new ResponseData<>();
+        Integer level = (Integer) request.getAttribute("level");
+        if (CommonConstant.USER_LEVEL_UNI_ADMIN.equals(level)) {
+            responseData = courseInfoService.removeCourse(courseId);
+        } else {
+            responseData.setError("权限不足，仅高校管理员可删除课程信息");
+        }
         return responseData;
     }
 
@@ -67,10 +79,15 @@ public class CourseInfoController {
     )
     @RequestMapping(value = "/modifyCourse", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<String> modifyCourse(@RequestBody CourseInfo courseInfo) {
+    public ResponseData<String> modifyCourse(HttpServletRequest request, @RequestBody CourseInfo courseInfo) {
 
-        ResponseData<String> responseData;
-        responseData = courseInfoService.modifyCourse(courseInfo);
+        ResponseData<String> responseData = new ResponseData<>();
+        Integer level = (Integer) request.getAttribute("level");
+        if (CommonConstant.USER_LEVEL_UNI_ADMIN.equals(level)) {
+            responseData = courseInfoService.modifyCourse(courseInfo);
+        } else {
+            responseData.setError("权限不足，仅高校管理员可修改课程信息");
+        }
         return responseData;
     }
 

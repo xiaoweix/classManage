@@ -83,12 +83,13 @@ public class CourseTimetablingServiceImpl implements CourseTimetablingService {
         List<ClassroomInfo> classroomInfoList = classroomInfoMapper.getClassroomBySchoolID(courseTimetabling.getSchoolId(),courseTimetabling.getBuildingLayer(),courseStudentNum);
 
         int cyclingCount = 0;
-
-        List<Integer> weekday = dealWeekday(courseTimetabling,year,month,day);
         //表示三天上課星期数 随机数且不相等
+        List<Integer> weekday = dealWeekday(courseTimetabling,year,month,day);
+
         List<Integer> courseTimeList = new ArrayList<>();
         int max=4;//第四次课
         int min=1;//第一次课
+        //随机安排每周的三节课
         while (courseTimeList.size() < 3) {
             Random random = new Random();
             int tempCourseTime = random.nextInt(max)%(max-min+1) + min;

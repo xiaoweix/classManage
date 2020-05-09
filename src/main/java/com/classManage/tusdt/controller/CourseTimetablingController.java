@@ -107,10 +107,15 @@ public class CourseTimetablingController {
     )
     @RequestMapping(value = "/getSchedule", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseData<List<ClassSchedule>> getSchedule(HttpServletRequest request) {
+    public ResponseData<List<ClassSchedule>> getSchedule(HttpServletRequest request,@RequestParam(value = "teacherId",required = false) Integer teacherId) {
         ResponseData<List<ClassSchedule>> responseData = new ResponseData<>();
         Integer userId = (Integer) request.getAttribute("userId");
-        List<ClassSchedule> classScheduleList = courseTimetablingService.getSchedule(userId);
+        List<ClassSchedule> classScheduleList;
+        if(teacherId != null) {
+            classScheduleList = courseTimetablingService.getSchedule(teacherId);
+        } else {
+            classScheduleList = courseTimetablingService.getSchedule(userId);
+        }
         if(classScheduleList == null) {
             responseData.setError("获取失败");
             return responseData;

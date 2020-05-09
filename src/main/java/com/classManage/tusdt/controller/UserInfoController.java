@@ -3,6 +3,7 @@ package com.classManage.tusdt.controller;
 
 import com.classManage.tusdt.base.common.ResponseData;
 import com.classManage.tusdt.base.constants.Response;
+import com.classManage.tusdt.constants.CommonConstant;
 import com.classManage.tusdt.model.BO.UserListBO;
 import com.classManage.tusdt.model.User;
 import com.classManage.tusdt.service.UserInfoService;
@@ -26,19 +27,6 @@ public class UserInfoController {
 
     @Resource
     private UserInfoService userInfoService;
-
-    @ApiOperation(value = "测试Hello", notes = "测试Hello")
-    @ResponseBody
-    @RequestMapping(value = "/Hello", method = RequestMethod.GET)
-    public ResponseData<String> HelloTusdt(HttpServletRequest request) {
-//        Claims claims = JwtUtils.validateToken(request);
-
-        ResponseData<String> responseData = new ResponseData<>();
-        responseData.setOK("Hello Asset Manage!");
-        return responseData;
-    }
-
-
 
     @ApiOperation(value = "获取用户列表", notes = "参数name可以模糊查询")
     @ApiResponses({@ApiResponse(code = Response.OK, message = "查询成功"),})
@@ -77,10 +65,17 @@ public class UserInfoController {
     )
     @RequestMapping(value = "/addUser", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<String> addUser(@RequestBody User user) {
+    public ResponseData<String> addUser(HttpServletRequest request, @RequestBody User user) {
 
-        ResponseData<String> responseData;
-        responseData = userInfoService.addUser(user);
+        ResponseData<String> responseData = new ResponseData<>();
+        Integer schoolId = (Integer) request.getAttribute("schoolId");
+        user.setSchoolId(schoolId);
+        Integer level = (Integer) request.getAttribute("level");
+        if (CommonConstant.USER_LEVEL_TEA < level) {
+            responseData = userInfoService.addUser(user);
+        } else {
+            responseData.setError("权限不足，仅管理员可添加用户信息");
+        }
         return responseData;
     }
 
@@ -97,7 +92,12 @@ public class UserInfoController {
                                            @RequestParam(value = "userId",required = true) Integer userId) {
 
         ResponseData<String> responseData = new ResponseData<>();
-        responseData = userInfoService.removeUser(userId);
+        Integer level = (Integer) request.getAttribute("level");
+        if (CommonConstant.USER_LEVEL_TEA < level) {
+            responseData = userInfoService.removeUser(userId);
+        } else {
+            responseData.setError("权限不足，仅管理员可删除用户信息");
+        }
         return responseData;
     }
 
@@ -110,10 +110,15 @@ public class UserInfoController {
     )
     @RequestMapping(value = "/modifyUser", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<String> modifyUser(@RequestBody User user) {
+    public ResponseData<String> modifyUser(HttpServletRequest request,@RequestBody User user) {
 
-        ResponseData<String> responseData;
-        responseData = userInfoService.modifyUser(user);
+        ResponseData<String> responseData = new ResponseData<>();
+        Integer level = (Integer) request.getAttribute("level");
+        if (CommonConstant.USER_LEVEL_TEA < level) {
+            responseData = userInfoService.modifyUser(user);
+        } else {
+            responseData.setError("权限不足，仅管理员可修改用户信息");
+        }
         return responseData;
     }
 
@@ -130,7 +135,12 @@ public class UserInfoController {
                                            @RequestParam(value = "userId",required = true) Integer userId) {
 
         ResponseData<String> responseData = new ResponseData<>();
-        responseData = userInfoService.agreeUserApply(userId);
+        Integer level = (Integer) request.getAttribute("level");
+        if (CommonConstant.USER_LEVEL_TEA < level) {
+            responseData = userInfoService.agreeUserApply(userId);
+        } else {
+            responseData.setError("权限不足，仅管理员可修改用户信息");
+        }
         return responseData;
     }
 

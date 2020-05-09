@@ -38,20 +38,24 @@ public class ClassroomInfoServiceImpl implements ClassroomInfoService {
     @Override
     public ResponseData<String> modifyClassroom(ClassroomInfo classroomInfo) {
         ResponseData<String> responseData = new ResponseData<>();
-
-        return null;
+        classroomInfoMapper.updateByPrimaryKeySelective(classroomInfo);
+        responseData.setOK("修改成功");
+        return responseData;
     }
 
     @Override
     public ResponseData<String> removeClassRoom(Integer classId) {
         ResponseData<String> responseData = new ResponseData<>();
-
-        return null;
+        ClassroomInfo classroomInfo = classroomInfoMapper.selectByPrimaryKey(classId);
+        classroomInfo.setIsDelete(CommonConstant.DELETED_YES);
+        classroomInfoMapper.updateByPrimaryKeySelective(classroomInfo);
+        responseData.setOK("删除成功");
+        return responseData;
     }
 
     @Override
-    public List<ClassroomNameBO> getAllClassroomName() {
-        return null;
+    public List<ClassroomInfo> getAllClassroomName( Integer schoolId) {
+        return classroomInfoMapper.getBySchoolID(schoolId);
     }
 
 }

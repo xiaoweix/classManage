@@ -64,4 +64,16 @@ public class CommonConstant {
      * 加密算法的名字
      */
     public static final String PASSWORD_HASH = "SHA-256";
+
+    /**
+     * 用户身份 1学生 2教师 3高校管理员 4超级管理员
+     */
+    public static final Integer USER_LEVEL_STU = 1;
+
+    public static final Integer USER_LEVEL_TEA = 2;
+
+    public static final Integer USER_LEVEL_UNI_ADMIN = 3;
+
+    public static final Integer USER_LEVEL_SUPER = 4;
+
 }
