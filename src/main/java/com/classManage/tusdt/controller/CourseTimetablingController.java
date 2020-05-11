@@ -107,7 +107,7 @@ public class CourseTimetablingController {
     )
     @RequestMapping(value = "/getSchedule", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseData<List<ClassSchedule>> getSchedule(HttpServletRequest request,@RequestParam(value = "teacherId",required = false) Integer teacherId) {
+    public ResponseData<List<ClassSchedule>> getSchedule(HttpServletRequest request, @RequestParam(value = "teacherId",required = false) Integer teacherId) {
         ResponseData<List<ClassSchedule>> responseData = new ResponseData<>();
         Integer userId = (Integer) request.getAttribute("userId");
         List<ClassSchedule> classScheduleList;
