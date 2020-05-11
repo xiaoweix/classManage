@@ -22,5 +22,5 @@ public interface ClassroomApplyMapper {
 
     List<OwnClassroomApplyListBO> getOwnApplyClassroom(@Param("userId") Integer userId);
 
-    List<ClassroomApplyListBO> getAdminApplyClassroom(@Param("result") Integer result);
+    List<ClassroomApplyListBO> getAdminApplyClassroom(@Param("result") Integer result,@Param("schoolId") Integer schoolId);
 }

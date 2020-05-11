@@ -210,7 +210,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
     <select id="getCoursePlan" resultType="com.classManage.tusdt.model.BO.CoursePlanListBO">
-    select ct.id, ci.course_name courseName,ct.course_num courseNum,u.user_name userName, class_id1 classId1,class_id2 classId2,class_id3 classId3,class_id4 classId4,ct.result,ct.remark
+    select ct.id, ci.course_name courseName,ct.course_num courseNum,ct.start_time startTime,u.user_name userName, class_id1 classId1,class_id2 classId2,class_id3 classId3,class_id4 classId4,ct.result,ct.remark
     from course_timetabling ct, course_info ci, user u
     where ct.is_delete = 0
     and ct.course_id = ci.id
@@ -221,5 +221,21 @@
     <if test="courseName != null">
       and course_name like CONCAT(CONCAT('%',#{courseName}),'%')
     </if>
+      order by ct.start_time desc
+  </select>
+  <select id="getTeacherCoursePlan" resultType="com.classManage.tusdt.model.BO.CoursePlanListBO">
+    select ct.id, ci.course_name courseName,ct.course_num courseNum,ct.start_time startTime,u.user_name userName, class_id1 classId1,class_id2 classId2,class_id3 classId3,class_id4 classId4,ct.result,ct.remark
+    from course_timetabling ct, course_info ci, user u
+    where ct.is_delete = 0
+    and ct.course_id = ci.id
+    and ct.user_id = u.id
+    and ct.user_id = #{userId,jdbcType=INTEGER}
+    <if test="schoolId != null" >
+      and ct.school_id = #{schoolId,jdbcType=INTEGER}
+    </if>
+    <if test="courseName != null">
+      and course_name like CONCAT(CONCAT('%',#{courseName}),'%')
+    </if>
+    order by ct.start_time desc
   </select>
 </mapper>

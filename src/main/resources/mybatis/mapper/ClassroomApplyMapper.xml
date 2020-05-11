@@ -199,8 +199,10 @@
     AND ci.is_delete = 0
     AND ca.room_id = ci.id
     and u.id = ca.user_id
+    and ci.school_id = #{schoolId,jdbcType=INTEGER}
     <if test="result != null" >
-      result = #{result,jdbcType=INTEGER},
+      and result = #{result,jdbcType=INTEGER},
     </if>
+
   </select>
 </mapper>

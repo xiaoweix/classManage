@@ -10,7 +10,17 @@ public class ClassroomNameBO {
 
     private Integer classroomId;
 
+    private String buildingName;
+
     private String classroomName;
+
+    public String getBuildingName() {
+        return buildingName;
+    }
+
+    public void setBuildingName(String buildingName) {
+        this.buildingName = buildingName;
+    }
 
     public Integer getClassroomId() {
         return classroomId;

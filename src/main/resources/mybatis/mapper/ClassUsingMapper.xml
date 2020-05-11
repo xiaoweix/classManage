@@ -161,21 +161,23 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByTime" resultType="com.classManage.tusdt.model.BO.ClassroomNameBO">
-    select ci.id classroomId, ci.room_name classroomName from classroom_info ci
+    select ci.id classroomId, ci.room_name classroomName,bi.building_name buildingName from classroom_info ci,building_info bi
     where ci.is_delete = 0
+    and bi.id = ci.building_id
     and ci.id not in(
     select room_id from class_using where is_delete=0
     and year = #{year,jdbcType=INTEGER}
     and month = #{month,jdbcType=INTEGER}
     and day = #{day,jdbcType=INTEGER}
+    and ci.room_capacity > #{stuNum,jdbcType=INTEGER}
     and course_time &gt; #{startCourse,jdbcType=INTEGER}
     and course_time &lt; #{endCourse,jdbcType=INTEGER}
     GROUP BY room_id
     )
     <if test="buildingId != null" >
-      and building_id = #{buildingId,jdbcType=INTEGER}
+      and bi.building_id = #{buildingId,jdbcType=INTEGER}
     </if>
-    and school_id = #{schoolId,jdbcType=INTEGER}
+    and ci.school_id = #{schoolId,jdbcType=INTEGER}
   </select>
   <select id="checkCourseTime" resultMap="BaseResultMap" >
     select

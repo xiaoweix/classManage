@@ -4,6 +4,7 @@ package com.classManage.tusdt.controller;
 import com.classManage.tusdt.base.common.ResponseData;
 import com.classManage.tusdt.base.constants.Response;
 import com.classManage.tusdt.constants.CommonConstant;
+import com.classManage.tusdt.model.BO.UserCountBO;
 import com.classManage.tusdt.model.BO.UserListBO;
 import com.classManage.tusdt.model.User;
 import com.classManage.tusdt.service.UserInfoService;
@@ -40,14 +41,11 @@ public class UserInfoController {
     public ResponseData<List<UserListBO>> getUserList(HttpServletRequest request,
                                                       @RequestParam(name = "currPage", required = false, defaultValue = "1") Integer currPage,
                                                       @RequestParam(name = "pageSize", required = false, defaultValue = "20") Integer pageSize,
-                                                      @RequestParam(value = "userId",required = false) Integer userId,
-                                                      @RequestParam(value = "userName",required = false) String userName,
-                                                      @RequestParam(value = "status",required = false) Integer status,
-                                                      @RequestParam(value = "telephone",required = false) String telephone,
-                                                      @RequestParam(value = "jobLevel",required = false) Integer jobLevel) {
+                                                      @RequestParam(value = "userName",required = false) String userName) {
 
         ResponseData<List<UserListBO>> responseData = new ResponseData<>();
-        List<UserListBO> userList = userInfoService.getUserList(userName);
+        Integer schoolId = (Integer) request.getAttribute("schoolId");
+        List<UserListBO> userList = userInfoService.getUserList(schoolId, userName);
         if(userList == null || userList.size() == 0) {
             responseData.setError("获取失败");
         }
@@ -144,5 +142,19 @@ public class UserInfoController {
         return responseData;
     }
 
+    @ApiOperation(value = "获取首页数据", notes = "")
+    @ApiResponses({@ApiResponse(code = Response.OK, message = "查询成功"),})
+    @ApiImplicitParams(
+            value = {
+                    @ApiImplicitParam(paramType = "header", name = "token", dataType = "String", required = true, value = "token"),
+            }
+    )
+    @RequestMapping(value = "/index", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseData<UserCountBO> index(HttpServletRequest request) {
+
+        Integer schoolId = (Integer) request.getAttribute("schoolId");
+        return userInfoService.indexCount(schoolId);
+    }
 }
 

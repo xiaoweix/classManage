@@ -50,7 +50,8 @@ public class ClassroomApplyServiceImpl implements ClassroomApplyService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        Map<Integer,Integer> startNum = CourseTimeUtils.generateStartTimeMap();
+        Map<Integer,Integer> endNum = CourseTimeUtils.generateEndTimeMap();
         timeCal.setTime(startTime);
         //获取到年份
         Integer year = timeCal.get(Calendar.YEAR);
@@ -60,14 +61,18 @@ public class ClassroomApplyServiceImpl implements ClassroomApplyService {
         Integer day = timeCal.get(Calendar.DATE);
         //获取开始的小时
         Integer startCourse = timeCal.get(Calendar.HOUR);
+        int startCourseNum = startNum.get(startCourse);
+
         timeCal.setTime(endTime);
         //获取结束的小时
         Integer endCourse = timeCal.get(Calendar.HOUR);
-        if(startCourse > endCourse) {
+        int endCourseNum = endNum.get(endCourse);
+
+        if(endCourseNum < startCourseNum) {
             responseData.setError("开始时间大于结束时间");
             return responseData;
         }
-        List<ClassroomNameBO> classroomNameBOList = classUsingMapper.selectByTime(schoolId,buildId,year,month,day,startCourse,endCourse);
+        List<ClassroomNameBO> classroomNameBOList = classUsingMapper.selectByTime(schoolId,buildId,year,month,day,startCourse,endCourse,stuNum);
         responseData.setOK("获取成功",classroomNameBOList);
         return responseData;
     }
@@ -80,6 +85,7 @@ public class ClassroomApplyServiceImpl implements ClassroomApplyService {
     @Override
     public ResponseData<String> submitApply(ClassroomApply classroomApply) {
         ResponseData<String> responseData = new ResponseData<>();
+        classroomApply.setApplyTime(new Date());
         classroomApply.setIsDelete(CommonConstant.DELETED_NO);
         //设置申请结果状态为等待审核
         classroomApply.setResult(CommonConstant.CLASSROOM_APPLY_RESULT_WAIT);
@@ -89,8 +95,8 @@ public class ClassroomApplyServiceImpl implements ClassroomApplyService {
     }
 
     @Override
-    public List<ClassroomApplyListBO> getRoomApplyListAdmin(Integer result) {
-        return classroomApplyMapper.getAdminApplyClassroom(result);
+    public List<ClassroomApplyListBO> getRoomApplyListAdmin(Integer result,Integer schoolId) {
+        return classroomApplyMapper.getAdminApplyClassroom(result,schoolId);
     }
 
     @Override
@@ -135,6 +141,11 @@ public class ClassroomApplyServiceImpl implements ClassroomApplyService {
             classUsing.setYear(startTimeCal.get(Calendar.YEAR));
             classUsing.setMonth(startTimeCal.get(Calendar.MONTH)+1);
             classUsing.setDay(startTimeCal.get(Calendar.DATE));
+            if(startTimeCal.get(Calendar.DAY_OF_WEEK)!=1) {
+                classUsing.setWeek(startTimeCal.get(Calendar.DAY_OF_WEEK));
+            } else {
+                classUsing.setWeek(7);
+            }
             classUsing.setCourseId(CommonConstant.CLASSROOM_USING_LEND_COURSEID);
             classUsing.setUserId(classroomApply.getUserId());
             classUsing.setCourseTime(i);

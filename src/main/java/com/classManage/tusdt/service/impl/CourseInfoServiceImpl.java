@@ -42,13 +42,16 @@ public class CourseInfoServiceImpl implements CourseInfoService {
     }
 
     @Override
-    public ResponseData<String> modifyCourse(CourseInfo courseInfo) {
+    public ResponseData<String> modifyCourse(CourseInfo newCourseInfo) {
         ResponseData<String> responseData = new ResponseData<>();
-        if (checkCourseName(courseInfo.getCourseName())) {
-            responseData.setError("该课程已存在");
-            return responseData;
+        CourseInfo oldCourseInfo = courseInfoMapper.selectByPrimaryKey(newCourseInfo.getId());
+        if(!oldCourseInfo.getCourseName().equals(newCourseInfo.getCourseName())) {
+            if (checkCourseName(newCourseInfo.getCourseName())) {
+                responseData.setError("该课程已存在");
+                return responseData;
+            }
         }
-        courseInfoMapper.updateByPrimaryKeySelective(courseInfo);
+        courseInfoMapper.updateByPrimaryKeySelective(newCourseInfo);
         responseData.setOK("修改成功");
 
         return responseData;
@@ -60,6 +63,7 @@ public class CourseInfoServiceImpl implements CourseInfoService {
         CourseInfo courseInfo = courseInfoMapper.selectByPrimaryKey(courseId);
         if(courseInfo == null) {
             responseData.setError("该课程不存在");
+            return responseData;
         }
         //TODO 判断该课程是否在教授
         courseInfo.setIsDelete(CommonConstant.DELETED_YES);

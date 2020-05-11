@@ -38,9 +38,13 @@ public class CourseTimetablingController {
     )
     @RequestMapping(value = "/addCoursePlan", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<String> addCoursePlan(@RequestBody CourseTimetabling courseTimetabling) {
+    public ResponseData<String> addCoursePlan(HttpServletRequest request, @RequestBody CourseTimetabling courseTimetabling) {
 
         ResponseData<String> responseData;
+        Integer schoolId = (Integer) request.getAttribute("schoolId");
+        Integer userId = (Integer) request.getAttribute("userId");
+        courseTimetabling.setSchoolId(schoolId);
+        courseTimetabling.setUserId(userId);
         responseData = courseTimetablingService.addCoursePlan(courseTimetabling);
         return responseData;
     }
@@ -67,6 +71,7 @@ public class CourseTimetablingController {
         responseData.set("获取成功",courseList);
         return responseData;
     }
+
     @ApiOperation(value = "同意排课安排", notes = "")
     @ApiResponses({@ApiResponse(code = Response.OK, message = "查询成功"),})
     @ApiImplicitParams(
@@ -123,4 +128,29 @@ public class CourseTimetablingController {
         responseData.setOK("获取成功",classScheduleList);
         return responseData;
     }
+
+    @ApiOperation(value = "获取课程列表", notes = "")
+    @ApiResponses({@ApiResponse(code = Response.OK, message = "查询成功"),})
+    @ApiImplicitParams(
+            value = {
+                    @ApiImplicitParam(paramType = "header", name = "token", dataType = "String", required = true, value = "token"),
+            }
+    )
+    @RequestMapping(value = "/teacherCoursePlanList", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseData<List<CoursePlanListBO>> teacherCoursePlanList(HttpServletRequest request,
+                                                                    @RequestParam(value = "courseName",required = false) String courseName) {
+
+        ResponseData<List<CoursePlanListBO>> responseData = new ResponseData<>();
+        Integer schoolId = (Integer) request.getAttribute("schoolId");
+        Integer userId = (Integer) request.getAttribute("userId");
+        List<CoursePlanListBO> courseList = courseTimetablingService.getTeacherCoursePlan(userId, schoolId, courseName);
+        if(courseList == null ) {
+            responseData.setError("获取失败");
+            return responseData;
+        }
+        responseData.set("获取成功",courseList);
+        return responseData;
+    }
+
 }

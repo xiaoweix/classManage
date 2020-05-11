@@ -21,7 +21,7 @@ public interface ClassUsingMapper {
 
     int updateByPrimaryKey(ClassUsing record);
 
-    List<ClassroomNameBO> selectByTime(Integer schoolId, Integer buildingId, Integer year,Integer month, Integer day,Integer startCourse,Integer endCourse);
+    List<ClassroomNameBO> selectByTime(Integer schoolId, Integer buildingId, Integer year,Integer month, Integer day,Integer startCourse,Integer endCourse,Integer stuNum);
 
     List<ClassUsing> checkCourseTime(@Param("classroomId") Integer classroomId, @Param("year") Integer year, @Param("month") Integer month, @Param("week") Integer week, @Param("courseTime") Integer courseTime);
 

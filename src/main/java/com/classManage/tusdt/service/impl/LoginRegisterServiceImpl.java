@@ -34,6 +34,10 @@ public class LoginRegisterServiceImpl implements LoginRegisterService {
         String hashPassword = HashUtils.hashEncrypt(password, CommonConstant.PASSWORD_HASH);
         //根据用户登录的email获取数据库中的user对象
         User user = userMapper.loginByEmail(email);
+        if (user == null ) {
+            responseData.setError("没有该用户请先注册");
+            return responseData;
+        }
         //判断账号的状态是否正常
         if(user.getStatus().equals(CommonConstant.USER_STATUS_ABNORMAL) || user.getStatus().equals(CommonConstant.USER_STATUS_UNAUDITED)) {
             responseData.setError("账号冻结或未通关审核 请联系管理员");

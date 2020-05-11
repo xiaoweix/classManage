@@ -3,6 +3,8 @@ package com.classManage.tusdt.service.impl;
 import com.classManage.tusdt.base.common.ResponseData;
 import com.classManage.tusdt.constants.CommonConstant;
 import com.classManage.tusdt.dao.UserMapper;
+import com.classManage.tusdt.model.BO.IndexBO;
+import com.classManage.tusdt.model.BO.UserCountBO;
 import com.classManage.tusdt.model.BO.UserListBO;
 import com.classManage.tusdt.model.User;
 import com.classManage.tusdt.service.UserInfoService;
@@ -11,8 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Description:
@@ -45,9 +46,9 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    public List<UserListBO> getUserList(String userName) {
+    public List<UserListBO> getUserList(Integer schoolId,String userName) {
 
-        return userMapper.selectUserByName(userName);
+        return userMapper.selectUserByName(schoolId, userName);
     }
 
     @Override
@@ -78,6 +79,44 @@ public class UserInfoServiceImpl implements UserInfoService {
         user.setStatus(CommonConstant.USER_STATUS_NORMAL);
         userMapper.updateByPrimaryKeySelective(user);
         responseData.setOK("操作成功！");
+        return responseData;
+    }
+
+    @Override
+    public ResponseData<UserCountBO> indexCount(Integer schoolId) {
+        ResponseData<UserCountBO> responseData= new ResponseData<>();
+        UserCountBO userCountBO = new UserCountBO();
+        userCountBO.setAdmin(userMapper.countAdmin());
+        userCountBO.setStudent(userMapper.countStu());
+        userCountBO.setTeacher(userMapper.countTea());
+        Date date = new Date();
+        Calendar timeCal = Calendar.getInstance();
+        timeCal.setTime(date);
+        int year = timeCal.get(Calendar.YEAR);
+        int month = timeCal.get(Calendar.MONTH)+1;
+        int day = timeCal.get(Calendar.DATE);
+
+        String tempSting = String.format("%d-%d-%d",year,month,day-6);
+        IndexBO indexBO1 = new IndexBO(0,tempSting,7);
+        tempSting = String.format("%d-%d-%d",year,month,day-5);
+        IndexBO indexBO2 = new IndexBO(1,tempSting,11);
+        tempSting = String.format("%d-%d-%d",year,month,day-4);
+        IndexBO indexBO3 = new IndexBO(2,tempSting,9);
+        tempSting = String.format("%d-%d-%d",year,month,day-3);
+        IndexBO indexBO4 = new IndexBO(3,tempSting,13);
+        tempSting = String.format("%d-%d-%d",year,month,day-2);
+        IndexBO indexBO5 = new IndexBO(4,tempSting,4);
+        tempSting = String.format("%d-%d-%d",year,month,day-1);
+        IndexBO indexBO6 = new IndexBO(5,tempSting,17);
+        List<IndexBO> indexBOList = new ArrayList<>();
+        indexBOList.add(indexBO1);
+        indexBOList.add(indexBO2);
+        indexBOList.add(indexBO3);
+        indexBOList.add(indexBO4);
+        indexBOList.add(indexBO5);
+        indexBOList.add(indexBO6);
+        userCountBO.setAddUserList(indexBOList);
+        responseData.setOK("获取成功",userCountBO);
         return responseData;
     }
 }
