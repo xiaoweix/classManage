@@ -41,7 +41,7 @@ public interface ClassroomApplyService {
      * 获取教室预约所有信息List
      * @return
      */
-    List<ClassroomApplyListBO> getRoomApplyListAdmin(Integer result);
+    List<ClassroomApplyListBO> getRoomApplyListAdmin(Integer result,Integer schoolId);
 
     /**
      * 获取自己个人 教室预约信息List

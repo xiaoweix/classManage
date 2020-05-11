@@ -43,6 +43,7 @@ public class CourseTimetablingServiceImpl implements CourseTimetablingService {
         //设置教学计划是否删除
         courseTimetabling.setIsDelete(CommonConstant.DELETED_NO);
         courseTimetabling.setResult(CommonConstant.CLASSROOM_APPLY_RESULT_WAIT);
+        courseTimetabling.setEndTime(new Date());
         //数据库插入教学计划
         courseTimetablingMapper.insert(courseTimetabling);
         responseData.setOK("添加成功！");
@@ -54,6 +55,12 @@ public class CourseTimetablingServiceImpl implements CourseTimetablingService {
 
         return courseTimetablingMapper.getCoursePlan(schoolId, courseName);
     }
+
+    @Override
+    public List<CoursePlanListBO> getTeacherCoursePlan(Integer userId, Integer schoolId, String courseName) {
+        return courseTimetablingMapper.getTeacherCoursePlan(userId,schoolId,courseName);
+    }
+
 
     @Override
     public ResponseData<String> dealCoursePlan(Integer courseTimetablingId) {
@@ -285,14 +292,24 @@ public class CourseTimetablingServiceImpl implements CourseTimetablingService {
     }
 
     private Integer getStudentNum(CourseTimetabling courseTimetabling) {
+        int stuNum = 0;
         if (courseTimetabling.getClassId1() != null) {
-
+            ClassInfo classInfo1 = classInfoMapper.selectByPrimaryKey(courseTimetabling.getClassId1());
+            stuNum += classInfo1.getClassNumber();
         }
-        ClassInfo classInfo1 = classInfoMapper.selectByPrimaryKey(courseTimetabling.getClassId1());
-        ClassInfo classInfo2 = classInfoMapper.selectByPrimaryKey(courseTimetabling.getClassId2());
-        ClassInfo classInfo3 = classInfoMapper.selectByPrimaryKey(courseTimetabling.getClassId3());
-        ClassInfo classInfo4 = classInfoMapper.selectByPrimaryKey(courseTimetabling.getClassId4());
-        return classInfo1.getClassNumber() + classInfo2.getClassNumber() + classInfo3.getClassNumber() + classInfo4.getClassNumber();
+        if (courseTimetabling.getClassId2() != null) {
+            ClassInfo classInfo2 = classInfoMapper.selectByPrimaryKey(courseTimetabling.getClassId2());
+            stuNum += classInfo2.getClassNumber();
+        }
+        if (courseTimetabling.getClassId3() != null) {
+            ClassInfo classInfo3 = classInfoMapper.selectByPrimaryKey(courseTimetabling.getClassId3());
+            stuNum += classInfo3.getClassNumber();
+        }
+        if (courseTimetabling.getClassId4() != null) {
+            ClassInfo classInfo4 = classInfoMapper.selectByPrimaryKey(courseTimetabling.getClassId4());
+            stuNum += classInfo4.getClassNumber();
+        }
+        return stuNum;
     }
     //判断教室是否被用 false表示没用 true表示用了㏂
     private boolean checkCourse(Integer classroomId, Integer year, Integer month, Integer courseTime,Integer week){

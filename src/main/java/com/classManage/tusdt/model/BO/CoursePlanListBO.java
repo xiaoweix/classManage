@@ -27,6 +27,8 @@ public class CoursePlanListBO {
 
     private String remark;
 
+    private Date startTime;
+
     private Integer result;
 
     public Integer getResult() {
@@ -107,5 +109,13 @@ public class CoursePlanListBO {
 
     public void setClassId4(Integer classId4) {
         this.classId4 = classId4;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
     }
 }

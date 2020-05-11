@@ -1,5 +1,7 @@
 package com.classManage.tusdt.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class ClassroomApply {
@@ -11,8 +13,10 @@ public class ClassroomApply {
 
     private Date applyTime;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
     private Date startTime;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
     private Date endTime;
 
     private Integer useNum;

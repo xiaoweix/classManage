@@ -40,6 +40,10 @@ public class CourseInfoController {
 
         ResponseData<String> responseData = new ResponseData<>();
         Integer level = (Integer) request.getAttribute("level");
+        Integer schoolId = (Integer) request.getAttribute("schoolId");
+        Integer userId = (Integer) request.getAttribute("userId");
+        courseInfo.setManageId(userId);
+        courseInfo.setSchoolId(schoolId);
         if (CommonConstant.USER_LEVEL_UNI_ADMIN.equals(level)) {
             responseData = courseInfoService.addCourse(courseInfo);
         } else {

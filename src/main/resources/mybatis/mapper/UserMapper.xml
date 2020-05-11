@@ -153,8 +153,9 @@
   <select id="selectUserByName" resultType="com.classManage.tusdt.model.BO.UserListBO">
     select id,user_name userName, email, job_level jobLevel,status,class_id classId, create_time createTime from user
     where 1>0
+    and school_id = #{schoolId,jdbcType=INTEGER}
     <if test="userName != null" >
-      user_name = #{userName,jdbcType=INTEGER},
+      and user_name = #{userName,jdbcType=INTEGER},
     </if>
   </select>
   <select id="countBySchool" resultType="java.lang.Integer">
@@ -166,5 +167,14 @@
     from user
     where is_delete = 0
     and email = #{email,jdbcType=VARCHAR}
+  </select>
+  <select id="countStu" resultType="java.lang.Integer">
+    select count(1) from user where is_delete = 0 and job_level = 1
+  </select>
+  <select id="countTea" resultType="java.lang.Integer">
+    select count(1) from user where is_delete = 0 and job_level = 2
+  </select>
+  <select id="countAdmin" resultType="java.lang.Integer">
+    select count(1) from user where is_delete = 0 and job_level = 3
   </select>
 </mapper>

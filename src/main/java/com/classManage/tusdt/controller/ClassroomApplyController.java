@@ -59,9 +59,11 @@ public class ClassroomApplyController {
     )
     @RequestMapping(value = "/submitApply", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<String> submitApply(@RequestBody ClassroomApply classroomApply) {
+    public ResponseData<String> submitApply(HttpServletRequest request, @RequestBody ClassroomApply classroomApply) {
 
         ResponseData<String> responseData;
+        Integer userId = (Integer) request.getAttribute("userId");
+        classroomApply.setUserId(userId);
         responseData = classroomApplyService.submitApply(classroomApply);
         return responseData;
     }
@@ -75,10 +77,10 @@ public class ClassroomApplyController {
     )
     @RequestMapping(value = "/getApplyClassroom", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseData<List<OwnClassroomApplyListBO>> getApplyClassroom(HttpServletRequest request,
-                                                                         @RequestParam(value = "userId",required = true) Integer userId) {
+    public ResponseData<List<OwnClassroomApplyListBO>> getApplyClassroom(HttpServletRequest request) {
 
         ResponseData<List<OwnClassroomApplyListBO>> responseData = new ResponseData<>();
+        Integer userId = (Integer) request.getAttribute("userId");
         List<OwnClassroomApplyListBO> userList = classroomApplyService.getOwnApplyClassroom(userId);
         if(userList == null || userList.size() == 0) {
             responseData.setError("获取失败");
@@ -102,7 +104,8 @@ public class ClassroomApplyController {
                                                                         @RequestParam(value = "result",required = false) Integer result) {
 
         ResponseData<List<ClassroomApplyListBO>> responseData = new ResponseData<>();
-        List<ClassroomApplyListBO> classroomApplyListBOList = classroomApplyService.getRoomApplyListAdmin(result);
+        Integer schoolId = (Integer) request.getAttribute("schoolId");
+        List<ClassroomApplyListBO> classroomApplyListBOList = classroomApplyService.getRoomApplyListAdmin(result,schoolId);
         if(classroomApplyListBOList == null || classroomApplyListBOList.size() == 0) {
             responseData.setError("获取失败");
         }

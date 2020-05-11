@@ -1,5 +1,7 @@
 package com.classManage.tusdt.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class CourseTimetabling {
@@ -21,8 +23,10 @@ public class CourseTimetabling {
 
     private Integer buildingLayer;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
     private Date startTime;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
     private Date endTime;
 
     private Integer schoolId;

@@ -19,5 +19,7 @@ public interface CourseTimetablingMapper {
 
     int updateByPrimaryKey(CourseTimetabling record);
 
-    List<CoursePlanListBO> getCoursePlan(Integer schoolId, String courseName);
+    List<CoursePlanListBO> getCoursePlan(@Param("schoolId") Integer schoolId, @Param("courseName") String courseName);
+
+    List<CoursePlanListBO> getTeacherCoursePlan(@Param("userId") Integer userId, @Param("schoolId") Integer schoolId,@Param("courseName") String courseName);
 }
