@@ -146,6 +146,7 @@ public class ClassroomApplyServiceImpl implements ClassroomApplyService {
             } else {
                 classUsing.setWeek(7);
             }
+            classUsing.setClassNum(classroomApply.getUseNum());
             classUsing.setCourseId(CommonConstant.CLASSROOM_USING_LEND_COURSEID);
             classUsing.setUserId(classroomApply.getUserId());
             classUsing.setCourseTime(i);

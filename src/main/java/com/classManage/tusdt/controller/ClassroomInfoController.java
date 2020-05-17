@@ -136,7 +136,7 @@ public class ClassroomInfoController {
             return responseData;
         }
         Integer schoolId = (Integer) request.getAttribute("schoolId"); //
-        List<ClassUseBO> classroomInfoList = classroomInfoService.getClassUse(startTime,startHour,endTime,endHour,status,schoolId);
+        List<ClassUseBO> classroomInfoList = classroomInfoService.getClassUse(startTime,endTime,startHour,endHour,status,schoolId);
         responseData.setOK("获取成功",classroomInfoList);
         return responseData;
     }

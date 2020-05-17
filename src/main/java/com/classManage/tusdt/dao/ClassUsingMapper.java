@@ -32,5 +32,5 @@ public interface ClassUsingMapper {
 
     List<ClassUsingScheduleBO> getSchedule(@Param("teacherId") Integer teacherId, @Param("year") Integer year, @Param("month") Integer month, @Param("week") Integer week, @Param("courseTime") Integer courseTime);
 
-    List<ClassUseBO> getByClassUse(Integer startCourse, Integer endCourse, Integer classroomId);
+    List<ClassUseBO> getByClassUse(Integer year,Integer month, Integer day, Integer startCourse, Integer endCourse, Integer classroomId);
 }

@@ -15,9 +15,7 @@ import com.classManage.tusdt.utils.CourseTimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Description:
@@ -74,39 +72,72 @@ public class ClassroomInfoServiceImpl implements ClassroomInfoService {
         Map<Integer,Integer> endNum = CourseTimeUtils.generateEndTimeMap();
         if (startTime != null) {
             String[] startYear = startTime.split("-");
-            String[] endYear = startTime.split("-");
-            String[] startHort = startTime.split(":");
-            String[] endHort = startTime.split(":");
-            Integer startMonth = Integer.getInteger(startYear[1]);
-            Integer endMonth = Integer.getInteger(endYear[1]);
-            Integer startDay = Integer.getInteger(startYear[2]);
-            Integer endDay = Integer.getInteger(endYear[2]);
-            Integer startCourse = startNum.get(Integer.getInteger(startHort[0]));
-            Integer endCourse = endNum.get(Integer.getInteger(endHort[0]));
+            String[] endYear = endTime.split("-");
+            String[] startHort = startHour.split(":");
+            String[] endHort = endHour.split(":");
+            Integer startMonth = Integer.valueOf(startYear[1]);
+            Integer endMonth = Integer.valueOf(endYear[1]);
+            Integer startDay = Integer.valueOf(startYear[2]);
+            Integer endDay = Integer.valueOf(endYear[2]);
+            Integer startCourse = startNum.get(Integer.valueOf(startHort[0]));
+            Integer endCourse = endNum.get(Integer.valueOf(endHort[0]));
             if (endMonth > startMonth) {
                 endDay+=30;
             }
             for (int j = 0; j < classUseBOList.size(); j++) {
                 List<ClassUseBO> classUseBO = new ArrayList<>();
                 for (int i = startDay; i < endDay; i++) {
-                    classUseBO = classUsingMapper.getByClassUse(startCourse,endCourse,schoolId,classUseBOList.get(j).getClassroomId());
+                    Integer year = Integer.valueOf(startYear[0]);
+                    Integer classroomId = classUseBOList.get(j).getClassroomId();
+                    classUseBO = classUsingMapper.getByClassUse(year,startMonth, i, startCourse,endCourse,classroomId);
+                    if (classUseBO.size() > 0) {
+                        classUseBOList.get(j).setClassNum(classUseBO.get(0).getClassNum());
+                        classUseBOList.get(j).setRemarks(classUseBO.get(0).getRemarks());
+                        break;
+                    } else {
+                        classUseBOList.get(j).setClassNum(0);
+                        classUseBOList.get(j).setRemarks("教室空闲");
+                    }
                 }
-                if (classUseBO.size() > 0) {
-                    classUseBOList.get(j).setClassNum(classUseBO.get(0).getClassNum());
-                }
+
             }
 
         } else {
+            Calendar timeCal = Calendar.getInstance();
+            timeCal.setTime(new Date());
+            int year = timeCal.get(Calendar.YEAR);
+            int month = timeCal.get(Calendar.MONTH)+1;
+            int day = timeCal.get(Calendar.DATE);
+            for (int j = 0; j < classUseBOList.size(); j++) {
+                List<ClassUseBO> classUseBO ;
+                classUseBO = classUsingMapper.getByClassUse(year,month, day, 1,10,classUseBOList.get(j).getClassroomId());
+                if (classUseBO.size() > 0) {
+                    classUseBOList.get(j).setClassNum(classUseBO.get(0).getClassNum());
+                    classUseBOList.get(j).setRemarks(classUseBO.get(0).getRemarks());
+                    continue;
+                }
 
+                classUseBOList.get(j).setClassNum(0);
+                classUseBOList.get(j).setRemarks("教室空闲");
+            }
         }
 
-
-        return null;
+        if (status != null) {
+            for (int i = 0; i < classUseBOList.size(); i++) {
+                if (status.equals(0) && !classUseBOList.get(i).getClassNum().equals(0)) {
+                    classUseBOList.remove(i--);
+                } else if (status.equals(1) && classUseBOList.get(i).getClassNum().equals(0)) {
+                    classUseBOList.remove(i--);
+                }
+            }
+        }
+        return classUseBOList;
     }
 
     public static void main(String[] args) {
         String time = "2020-05-12";
         String[] times = time.split("-");
+        System.out.println(Integer.valueOf(times[0]));
         for (int i = 0; i < times.length; i++) {
             System.out.println(times[i]);
         }

@@ -163,14 +163,14 @@ public class CourseTimetablingServiceImpl implements CourseTimetablingService {
                             courseTimetabling.getCourseId(),
                             courseTimetabling.getUserId(),
                             classroomInfo.getId(),year,month,newDay,weekday.get(j),1,
-                            remark,CommonConstant.DELETED_NO
+                            remark,CommonConstant.DELETED_NO, courseStudentNum
 
                     );
                     ClassUsing classUsing2 = new ClassUsing(
                             courseTimetabling.getCourseId(),
                             courseTimetabling.getUserId(),
                             classroomInfo.getId(),year,month,newDay,weekday.get(j),2,
-                            remark,CommonConstant.DELETED_NO
+                            remark,CommonConstant.DELETED_NO, courseStudentNum
 
                     );
                     classUsingMapper.insert(classUsing);
@@ -180,14 +180,14 @@ public class CourseTimetablingServiceImpl implements CourseTimetablingService {
                             courseTimetabling.getCourseId(),
                             courseTimetabling.getUserId(),
                             classroomInfo.getId(),year,month,newDay,weekday.get(j),3,
-                            remark,CommonConstant.DELETED_NO
+                            remark,CommonConstant.DELETED_NO, courseStudentNum
 
                     );
                     ClassUsing classUsing2 = new ClassUsing(
                             courseTimetabling.getCourseId(),
                             courseTimetabling.getUserId(),
                             classroomInfo.getId(),year,month,newDay,weekday.get(j),4,
-                            remark,CommonConstant.DELETED_NO
+                            remark,CommonConstant.DELETED_NO, courseStudentNum
                     );
                     classUsingMapper.insert(classUsing);
                     classUsingMapper.insert(classUsing2);
@@ -196,14 +196,14 @@ public class CourseTimetablingServiceImpl implements CourseTimetablingService {
                             courseTimetabling.getCourseId(),
                             courseTimetabling.getUserId(),
                             classroomInfo.getId(),year,month,newDay,weekday.get(j),6,
-                            remark,CommonConstant.DELETED_NO
+                            remark,CommonConstant.DELETED_NO, courseStudentNum
 
                     );
                     ClassUsing classUsing2 = new ClassUsing(
                             courseTimetabling.getCourseId(),
                             courseTimetabling.getUserId(),
                             classroomInfo.getId(),year,month,newDay,weekday.get(j),7,
-                            remark,CommonConstant.DELETED_NO
+                            remark,CommonConstant.DELETED_NO, courseStudentNum
 
                     );
                     classUsingMapper.insert(classUsing);
@@ -213,14 +213,14 @@ public class CourseTimetablingServiceImpl implements CourseTimetablingService {
                             courseTimetabling.getCourseId(),
                             courseTimetabling.getUserId(),
                             classroomInfo.getId(),year,month,newDay,weekday.get(j),8,
-                            remark,CommonConstant.DELETED_NO
+                            remark,CommonConstant.DELETED_NO, courseStudentNum
 
                     );
                     ClassUsing classUsing2 = new ClassUsing(
                             courseTimetabling.getCourseId(),
                             courseTimetabling.getUserId(),
                             classroomInfo.getId(),year,month,newDay,weekday.get(j),9,
-                            remark,CommonConstant.DELETED_NO
+                            remark,CommonConstant.DELETED_NO, courseStudentNum
 
                     );
                     classUsingMapper.insert(classUsing);

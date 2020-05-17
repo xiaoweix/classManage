@@ -23,10 +23,12 @@ public class ClassUsing {
 
     private Integer isDelete;
 
+    private Integer classNum;
+
     public ClassUsing() {
     }
 
-    public ClassUsing(Integer courseId, Integer userId, Integer roomId, Integer year, Integer month, Integer day, Integer week, Integer courseTime, String remark, Integer isDelete) {
+    public ClassUsing(Integer courseId, Integer userId, Integer roomId, Integer year, Integer month, Integer day, Integer week, Integer courseTime, String remark, Integer isDelete, Integer classNum) {
         this.courseId = courseId;
         this.userId = userId;
         this.roomId = roomId;
@@ -37,6 +39,7 @@ public class ClassUsing {
         this.courseTime = courseTime;
         this.remark = remark;
         this.isDelete = isDelete;
+        this.classNum = classNum;
     }
 
     public Integer getId() {
@@ -125,5 +128,13 @@ public class ClassUsing {
 
     public void setIsDelete(Integer isDelete) {
         this.isDelete = isDelete;
+    }
+
+    public Integer getClassNum() {
+        return classNum;
+    }
+
+    public void setClassNum(Integer classNum) {
+        this.classNum = classNum;
     }
 }

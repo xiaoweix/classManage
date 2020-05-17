@@ -145,9 +145,9 @@
   </select>
   <select id="getClassUseBySchoolId" resultType="com.classManage.tusdt.model.BO.ClassUseBO">
     select ci.id classroomId,
-    ci.room_name roomName, bi.building_name buildName, ci.room_capacity capacity
+    ci.room_name classroom, bi.building_name buildName, ci.room_capacity capacity
     from classroom_info ci, building_info bi
-    where is_delete = 0 and ci.building_id = bi.id
-    and school_id = #{schoolId,jdbcType=INTEGER}
+    where ci.is_delete = 0 and ci.building_id = bi.id
+    and ci.school_id = #{schoolId,jdbcType=INTEGER}
   </select>
 </mapper>

@@ -13,9 +13,11 @@
     <result column="course_time" property="courseTime" jdbcType="INTEGER" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="is_delete" property="isDelete" jdbcType="INTEGER" />
+    <result column="class_num" property="classNum" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, course_id, user_id, room_id, year, month, day, week, course_time, remark, is_delete
+    id, course_id, user_id, room_id, year, month, day, week, course_time, remark, is_delete,
+    class_num
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select
@@ -31,11 +33,13 @@
     insert into class_using (id, course_id, user_id,
     room_id, year, month,
     day, week, course_time,
-    remark, is_delete)
+    remark, is_delete, class_num
+    )
     values (#{id,jdbcType=INTEGER}, #{courseId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER},
     #{roomId,jdbcType=INTEGER}, #{year,jdbcType=INTEGER}, #{month,jdbcType=INTEGER},
     #{day,jdbcType=INTEGER}, #{week,jdbcType=INTEGER}, #{courseTime,jdbcType=INTEGER},
-    #{remark,jdbcType=VARCHAR}, #{isDelete,jdbcType=INTEGER})
+    #{remark,jdbcType=VARCHAR}, #{isDelete,jdbcType=INTEGER}, #{classNum,jdbcType=INTEGER}
+    )
   </insert>
   <insert id="insertSelective" parameterType="com.classManage.tusdt.model.ClassUsing" >
     insert into class_using
@@ -73,6 +77,9 @@
       <if test="isDelete != null" >
         is_delete,
       </if>
+      <if test="classNum != null" >
+        class_num,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -107,6 +114,9 @@
       </if>
       <if test="isDelete != null" >
         #{isDelete,jdbcType=INTEGER},
+      </if>
+      <if test="classNum != null" >
+        #{classNum,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -143,6 +153,9 @@
       <if test="isDelete != null" >
         is_delete = #{isDelete,jdbcType=INTEGER},
       </if>
+      <if test="classNum != null" >
+        class_num = #{classNum,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -157,7 +170,8 @@
     week = #{week,jdbcType=INTEGER},
     course_time = #{courseTime,jdbcType=INTEGER},
     remark = #{remark,jdbcType=VARCHAR},
-    is_delete = #{isDelete,jdbcType=INTEGER}
+    is_delete = #{isDelete,jdbcType=INTEGER},
+    class_num = #{classNum,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByTime" resultType="com.classManage.tusdt.model.BO.ClassroomNameBO">
@@ -225,9 +239,11 @@
     and course_id != '0'
   </select>
   <select id="getByClassUse" resultType="com.classManage.tusdt.model.BO.ClassUseBO">
-    select ci. from class_using cu, course_info ci, where cu.course_id = ci.id
-    and cu.room_id = #{classroomId,jdbcType=INTEGER}
-    and cri.
-
+    select cu.remark remarks,cu.class_num classNum from class_using cu where cu.room_id = #{classroomId,jdbcType=INTEGER}
+    and cu.course_time > #{startCourse,jdbcType=INTEGER}
+    and #{endCourse,jdbcType=INTEGER} > cu.course_time
+    and year = #{year,jdbcType=INTEGER}
+    and month = #{month,jdbcType=INTEGER}
+    and day = #{day,jdbcType=INTEGER}
   </select>
 </mapper>
