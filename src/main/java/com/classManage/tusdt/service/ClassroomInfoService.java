@@ -1,6 +1,7 @@
 package com.classManage.tusdt.service;
 
 import com.classManage.tusdt.base.common.ResponseData;
+import com.classManage.tusdt.model.BO.ClassUseBO;
 import com.classManage.tusdt.model.BO.ClassroomApplyListBO;
 import com.classManage.tusdt.model.BO.ClassroomNameBO;
 import com.classManage.tusdt.model.BO.DateStartAndEndBO;
@@ -25,6 +26,6 @@ public interface ClassroomInfoService {
 
     List<ClassroomInfo> getAllClassroomName(Integer schoolId);
 
-
+    List<ClassUseBO> getClassUse(String startTime, String endTime, String startHour, String endHour, Integer status,Integer schoolId);
 
 }

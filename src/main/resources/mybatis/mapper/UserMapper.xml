@@ -151,9 +151,15 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectUserByName" resultType="com.classManage.tusdt.model.BO.UserListBO">
-    select id,user_name userName, email, job_level jobLevel,status,class_id classId, create_time createTime from user
-    where 1>0
-    and school_id = #{schoolId,jdbcType=INTEGER}
+    select id,user_name userName, email, job_level jobLevel,status,class_id classId,si.school_name schoolName, create_time createTime
+    from user, school_info si
+    where user.school_id = si.id
+    <if test="schoolId != 0" >
+      and school_id = #{schoolId,jdbcType=INTEGER}
+    </if>
+    <if test="schoolId == 0" >
+      and job_level = 3
+    </if>
     <if test="userName != null" >
       and user_name = #{userName,jdbcType=INTEGER},
     </if>
@@ -176,5 +182,12 @@
   </select>
   <select id="countAdmin" resultType="java.lang.Integer">
     select count(1) from user where is_delete = 0 and job_level = 3
+  </select>
+  <select id="selectBySchoolId" resultType="com.classManage.tusdt.model.User">
+    select
+    <include refid="Base_Column_List"/>
+    from user
+    where is_delete = 0
+    and school_id = #{schoolId,jdbcType=INTEGER}
   </select>
 </mapper>

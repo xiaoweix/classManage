@@ -74,6 +74,6 @@ public class CommonConstant {
 
     public static final Integer USER_LEVEL_UNI_ADMIN = 3;
 
-    public static final Integer USER_LEVEL_SUPER = 4;
+    public static final Integer USER_LEVEL_SUPER = 9;
 
 }

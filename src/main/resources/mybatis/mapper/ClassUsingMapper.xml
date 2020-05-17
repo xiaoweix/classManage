@@ -164,12 +164,12 @@
     select ci.id classroomId, ci.room_name classroomName,bi.building_name buildingName from classroom_info ci,building_info bi
     where ci.is_delete = 0
     and bi.id = ci.building_id
+    and ci.room_capacity > #{stuNum,jdbcType=INTEGER}
     and ci.id not in(
     select room_id from class_using where is_delete=0
     and year = #{year,jdbcType=INTEGER}
     and month = #{month,jdbcType=INTEGER}
     and day = #{day,jdbcType=INTEGER}
-    and ci.room_capacity > #{stuNum,jdbcType=INTEGER}
     and course_time &gt; #{startCourse,jdbcType=INTEGER}
     and course_time &lt; #{endCourse,jdbcType=INTEGER}
     GROUP BY room_id
@@ -222,6 +222,12 @@
     and month = #{month,jdbcType=INTEGER}
     and week = #{week,jdbcType=INTEGER}
     and course_time = #{courseTime,jdbcType=INTEGER}
-    and remark != '0'
+    and course_id != '0'
+  </select>
+  <select id="getByClassUse" resultType="com.classManage.tusdt.model.BO.ClassUseBO">
+    select ci. from class_using cu, course_info ci, where cu.course_id = ci.id
+    and cu.room_id = #{classroomId,jdbcType=INTEGER}
+    and cri.
+
   </select>
 </mapper>

@@ -31,4 +31,6 @@ public interface UserMapper {
     Integer countTea();
 
     Integer countAdmin();
+
+    List<User> selectBySchoolId(@Param("schoolId") Integer schoolId);
 }

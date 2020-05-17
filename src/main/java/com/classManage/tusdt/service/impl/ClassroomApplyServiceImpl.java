@@ -149,7 +149,6 @@ public class ClassroomApplyServiceImpl implements ClassroomApplyService {
             classUsing.setCourseId(CommonConstant.CLASSROOM_USING_LEND_COURSEID);
             classUsing.setUserId(classroomApply.getUserId());
             classUsing.setCourseTime(i);
-            classUsing.setRemark("0");
             classUsing.setIsDelete(CommonConstant.DELETED_NO);
             classUsingMapper.insert(classUsing);
         }

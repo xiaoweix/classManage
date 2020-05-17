@@ -22,6 +22,8 @@ public class UserListBO {
 
     private Integer classId;
 
+    private String schoolName;
+
     private Date createTime;
 
     public Integer getId() {
@@ -78,5 +80,13 @@ public class UserListBO {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public String getSchoolName() {
+        return schoolName;
+    }
+
+    public void setSchoolName(String schoolName) {
+        this.schoolName = schoolName;
     }
 }

@@ -89,6 +89,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         userCountBO.setAdmin(userMapper.countAdmin());
         userCountBO.setStudent(userMapper.countStu());
         userCountBO.setTeacher(userMapper.countTea());
+
         Date date = new Date();
         Calendar timeCal = Calendar.getInstance();
         timeCal.setTime(date);

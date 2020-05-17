@@ -67,7 +67,7 @@ public class SchoolInfoController {
 
         ResponseData<String> responseData = new ResponseData<>();
         Integer level = (Integer) request.getAttribute("level");
-        if (CommonConstant.USER_LEVEL_STU.equals(level)) {
+        if (CommonConstant.USER_LEVEL_SUPER.equals(level)) {
             responseData = schoolInfoService.removeSchool(schoolID);
         } else {
             responseData.setError("权限不足，仅系统管理员可删除高校信息");

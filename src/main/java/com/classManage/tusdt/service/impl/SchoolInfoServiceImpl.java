@@ -82,6 +82,11 @@ public class SchoolInfoServiceImpl implements SchoolInfoService {
         //根据id查询学校信息
         SchoolInfo schoolInfo = schoolInfoMapper.selectByPrimaryKey(schoolId);
         //TODO 要判断有没有学生，如果学校下有用户则不能删除
+        List<User> userList = userMapper.selectBySchoolId(schoolId);
+        if (userList!=null && !userList.isEmpty()) {
+            responseData.setError("该学校还有用户,不能删除");
+            return responseData;
+        }
         if(checkSchoolStudent(schoolId)) {
             responseData.setError("删除失败，该学校下还有学生");
             return responseData;
